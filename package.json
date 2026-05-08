@@ -1,0 +1,6 @@
+{
+  "name": "wedding-invitation-spa",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Static wedding site — no build step"
+}

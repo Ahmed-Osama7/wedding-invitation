@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="دعوة زفاف فاخرة — Wedding Invitation" />
+    <title>Wedding Invitation | دعوة زفاف</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Outfit:wght@300;400;500;600&family=Noto+Naskh+Arabic:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Loading screen -->
+    <div id="loading-screen" class="loading-screen" aria-hidden="false">
+      <div class="loading-inner">
+        <div class="loading-monogram" aria-hidden="true">∞</div>
+        <p class="loading-text">ننتظر لحظتكم الجميلة</p>
+        <div class="loading-bar"><span class="loading-bar-fill"></span></div>
+      </div>
+    </div>
+
+    <!-- Floating particles (hero + global ambience) -->
+    <div class="particles" id="particles" aria-hidden="true"></div>
+
+    <!-- Music toggle -->
+    <button
+      type="button"
+      class="music-toggle"
+      id="music-toggle"
+      aria-pressed="false"
+      aria-label="تشغيل أو إيقاف الموسيقى الخلفية"
+      title="الموسيقى"
+    >
+      <span class="music-icon music-off" aria-hidden="true">♪</span>
+      <span class="music-icon music-on" aria-hidden="true">♫</span>
+    </button>
+
+    <audio id="bg-audio" loop preload="none">
+      <!-- Replace src with your licensed audio file for production -->
+      <source src="" type="audio/mpeg" />
+    </audio>
+
+    <header class="site-header">
+      <nav class="nav-bar glass">
+        <a href="#hero" class="nav-brand">Wedding</a>
+        <ul class="nav-links">
+          <li><a href="#countdown">العد التنازلي</a></li>
+          <li><a href="#venue">المكان</a></li>
+          <li><a href="#messages-form">رسالة</a></li>
+          <li><a href="#rsvp">RSVP</a></li>
+          <li><a href="#guest-wall">الرسائل</a></li>
+        </ul>
+        <button type="button" class="nav-toggle" id="nav-toggle" aria-label="القائمة">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- SECTION 1: Hero -->
+      <section id="hero" class="hero section-reveal section-reveal--visible">
+        <div class="hero-bg">
+          <div class="hero-gradient"></div>
+          <div class="hero-glow hero-glow--1"></div>
+          <div class="hero-glow hero-glow--2"></div>
+        </div>
+        <div class="hero-content">
+          <p class="hero-kicker animate-in">بكل حب ووفاء</p>
+          <h1 class="hero-title animate-in animate-in--delay-1">Wedding Invitation</h1>
+          <p class="hero-subtitle animate-in animate-in--delay-2" lang="ar">
+            ندعوكم لاستكمال قصة الحب بلمسة من النور، حيث يلتقي القلبان تحت سماء من الحرير والنجوم.
+          </p>
+          <p class="hero-sub-en animate-in animate-in--delay-3" lang="en" dir="ltr">
+            Join us for an evening woven with silk light, gentle vows, and timeless elegance.
+          </p>
+          <a href="#countdown" class="cta-btn animate-in animate-in--delay-4">
+            <span>اكتشف التفاصيل</span>
+            <span class="cta-shine"></span>
+          </a>
+        </div>
+      </section>
+
+      <!-- SECTION 2: Countdown -->
+      <section id="countdown" class="countdown-section section-reveal">
+        <div class="container">
+          <header class="section-head">
+            <p class="section-eyebrow">حتى ليلة العمر</p>
+            <h2 class="section-title">العد التنازلي</h2>
+            <p class="section-desc">
+              ٥ يونيو — الساعة ٩ مساءً<br />
+              <span lang="en" dir="ltr">June 5 · 9:00 PM</span>
+            </p>
+          </header>
+          <div class="countdown-grid" id="countdown-grid" role="timer" aria-live="polite">
+            <div class="count-card glass-card">
+              <span class="count-value" id="cd-days">00</span>
+              <span class="count-label">أيام · Days</span>
+            </div>
+            <div class="count-card glass-card">
+              <span class="count-value" id="cd-hours">00</span>
+              <span class="count-label">ساعات · Hours</span>
+            </div>
+            <div class="count-card glass-card">
+              <span class="count-value" id="cd-minutes">00</span>
+              <span class="count-label">دقائق · Minutes</span>
+            </div>
+            <div class="count-card glass-card">
+              <span class="count-value" id="cd-seconds">00</span>
+              <span class="count-label">ثوانٍ · Seconds</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Venue -->
+      <section id="venue" class="venue-section section-reveal">
+        <div class="container venue-layout">
+          <div class="venue-copy">
+            <p class="section-eyebrow">أين تلتقي القلوب</p>
+            <h2 class="section-title">قاعة الاحتفال</h2>
+            <p class="venue-text">
+              في فضاء صُمم للضوء الناعم والذكريات الدائمة، نستقبلكم في أجواء راقية تجمع بين البساطة
+              والفخامة.
+            </p>
+            <p class="venue-text-en" lang="en" dir="ltr">
+              A luminous hall shaped for soft light and lasting memories — refined, intimate, unforgettable.
+            </p>
+            <a
+              class="map-btn"
+              href="https://maps.app.goo.gl/cnn7BLH7FaiE5mCw9?g_st=aw"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>فتح الموقع على خرائط Google</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                  fill="currentColor"
+                />
+              </svg>
+            </a>
+          </div>
+          <div class="venue-visual glass-card">
+            <div class="venue-frame">
+              <div class="venue-shimmer"></div>
+              <p class="venue-placeholder">الخريطة تنتظر خطواتكم</p>
+              <p class="venue-placeholder-sub" lang="en" dir="ltr">Your arrival completes the story.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: Message + canvas -->
+      <section id="messages-form" class="messages-form-section section-reveal">
+        <div class="container narrow">
+          <header class="section-head">
+            <p class="section-eyebrow">رسالة من القلب</p>
+            <h2 class="section-title">أهدونا كلماتكم</h2>
+            <p class="section-desc">
+              اكتبوا لنا أمنية، أو ارسموا توقيعاً دافئاً — كل لمسة تُحفظ بحب.
+            </p>
+          </header>
+          <form id="guest-message-form" class="glass-card form-card" novalidate>
+            <label class="field">
+              <span class="field-label">اسمكم الطيب</span>
+              <input type="text" name="guestName" id="msg-name" maxlength="120" placeholder="مثال: سارة &amp; عمر" autocomplete="name" />
+            </label>
+            <label class="field">
+              <span class="field-label">رسالتكم</span>
+              <textarea
+                name="message"
+                id="msg-text"
+                rows="4"
+                maxlength="1500"
+                placeholder="من قلبٍ إلى قلبٍ… دعواتكم تُضيء يومنا."
+                required
+              ></textarea>
+            </label>
+            <div class="canvas-block">
+              <div class="canvas-head">
+                <span class="field-label">توقيع أو رسم (اختياري)</span>
+                <button type="button" class="text-btn" id="canvas-clear">مسح اللوحة</button>
+              </div>
+              <canvas id="signature-pad" width="600" height="220" class="signature-pad" aria-label="منطقة الرسم"></canvas>
+              <p class="canvas-hint">اسحبوا بإصبعكم أو القلم على الشاشة — نحفظ الرسم كصورة.</p>
+            </div>
+            <button type="submit" class="submit-btn" id="msg-submit">
+              <span class="btn-label">إرسال الرسالة</span>
+              <span class="btn-spinner" aria-hidden="true"></span>
+            </button>
+            <p class="form-status" id="msg-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
+      <!-- SECTION 5: RSVP -->
+      <section id="rsvp" class="rsvp-section section-reveal">
+        <div class="container narrow">
+          <header class="section-head">
+            <p class="section-eyebrow">تأكيد الحضور</p>
+            <h2 class="section-title">RSVP</h2>
+            <p class="section-desc">
+              يسرّنا معرفة إن كنتم معنا في هذه الأمسية، لنرتب لكم أجمل استقبال.
+            </p>
+          </header>
+          <form id="rsvp-form" class="glass-card form-card" novalidate>
+            <label class="field">
+              <span class="field-label">الاسم الكريم <span class="req">*</span></span>
+              <input type="text" name="name" id="rsvp-name" maxlength="120" required placeholder="الاسم الثلاثي" autocomplete="name" />
+            </label>
+            <fieldset class="field field-radio">
+              <legend class="field-label">هل ستحضرون؟ <span class="req">*</span></legend>
+              <div class="radio-row">
+                <label class="radio-pill">
+                  <input type="radio" name="attend" value="yes" required />
+                  <span>نعم · Yes</span>
+                </label>
+                <label class="radio-pill">
+                  <input type="radio" name="attend" value="no" />
+                  <span>لا · No</span>
+                </label>
+              </div>
+            </fieldset>
+            <label class="field">
+              <span class="field-label">عدد الضيوف <span class="req">*</span></span>
+              <input type="number" name="guestCount" id="rsvp-count" min="1" max="20" step="1" required placeholder="1" />
+            </label>
+            <label class="field">
+              <span class="field-label">ملاحظة (اختياري)</span>
+              <textarea name="note" id="rsvp-note" rows="3" maxlength="800" placeholder="حساسية غذائية، مقعد، أو أي تفاصيل تهمكم"></textarea>
+            </label>
+            <button type="submit" class="submit-btn" id="rsvp-submit">
+              <span class="btn-label">إرسال التأكيد</span>
+              <span class="btn-spinner" aria-hidden="true"></span>
+            </button>
+            <p class="form-status" id="rsvp-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
+      <!-- SECTION 6: Guest messages wall -->
+      <section id="guest-wall" class="guest-wall-section section-reveal">
+        <div class="container">
+          <header class="section-head">
+            <p class="section-eyebrow">أصداء المحبة</p>
+            <h2 class="section-title">رسائل الضيوف</h2>
+            <p class="section-desc">أحدث الكلمات التي وصلتنا — شكراً لكونكم جزءاً من قصتنا.</p>
+          </header>
+          <div id="guest-messages-loading" class="wall-loading">جاري التحميل…</div>
+          <div id="guest-messages-empty" class="wall-empty hidden">لم تصل رسائل بعد — كونوا أول من يكتب.</div>
+          <ul id="guest-messages-list" class="message-wall"></ul>
+        </div>
+      </section>
+
+      <!-- SECTION 7: Footer -->
+      <footer class="site-footer">
+        <div class="footer-inner glass">
+          <p class="footer-line" lang="ar">
+            بحبٍ يفوق الكلمات، ننتظركم في أمسية تُشبه الحلم.
+          </p>
+          <p class="footer-line-en" lang="en" dir="ltr">
+            With love beyond words — we await you in an evening shaped like a dream.
+          </p>
+          <p class="footer-meta">Wedding Invitation · 2026</p>
+        </div>
+      </footer>
+    </main>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>

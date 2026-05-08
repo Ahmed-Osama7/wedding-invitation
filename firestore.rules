@@ -1,0 +1,89 @@
+rules_version = '2';
+
+/**
+ * Firestore security rules for the public wedding invitation site.
+ *
+ * Goals:
+ * - Allow guests to submit messages + RSVP once per session flow (client-side).
+ * - Prevent arbitrary reads of sensitive collections if you later add them.
+ * - Limit payload sizes / field shapes to reduce spam and abuse.
+ *
+ * Deploy: Firebase Console → Firestore → Rules, or `firebase deploy --only firestore:rules`
+ */
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isReasonableMessageText(t) {
+      return t is string && t.size() > 0 && t.size() <= 1500;
+    }
+
+    function isReasonableGuestName(n) {
+      return n is string && n.size() > 0 && n.size() <= 120;
+    }
+
+    /**
+     * Drawing: optional PNG data URL from canvas (large string).
+     * Empty string allowed when guest did not draw.
+     */
+    function isReasonableDrawing(d) {
+      return d is string &&
+        d.size() <= 900000 &&
+        (d.size() == 0 || d.matches('data:image/png;base64,.*'));
+    }
+
+    function isReasonableRsvpName(n) {
+      return n is string && n.size() > 0 && n.size() <= 120;
+    }
+
+    function isAttendValue(v) {
+      return v is string && (v == 'yes' || v == 'no');
+    }
+
+    function isGuestCount(c) {
+      return c is int && c >= 1 && c <= 20;
+    }
+
+    function isReasonableNote(n) {
+      return n is string && n.size() <= 800;
+    }
+
+    match /messages/{messageId} {
+      /**
+       * Public read: messages appear on the invitation wall.
+       * To keep RSVPs private, store them in `rsvps` with read locked (below).
+       */
+      allow read: if true;
+
+      allow create: if
+        request.resource.data.keys().hasOnly(['guestName', 'text', 'drawing', 'createdAt']) &&
+        isReasonableGuestName(request.resource.data.guestName) &&
+        isReasonableMessageText(request.resource.data.text) &&
+        isReasonableDrawing(request.resource.data.drawing) &&
+        request.resource.data.createdAt == request.time;
+
+      allow update, delete: if false;
+    }
+
+    match /rsvps/{rsvpId} {
+      /**
+       * Writes allowed for anonymous guests; reads denied by default for privacy.
+       * Change `allow read` to `if true` only if you want a public RSVP list.
+       */
+      allow read: if false;
+
+      allow create: if
+        request.resource.data.keys().hasOnly(['name', 'attend', 'guestCount', 'note', 'createdAt']) &&
+        isReasonableRsvpName(request.resource.data.name) &&
+        isAttendValue(request.resource.data.attend) &&
+        isGuestCount(request.resource.data.guestCount) &&
+        isReasonableNote(request.resource.data.note) &&
+        request.resource.data.createdAt == request.time;
+
+      allow update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
