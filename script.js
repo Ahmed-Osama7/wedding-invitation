@@ -1,16 +1,9 @@
 /**
- * Wedding invitation SPA — countdown, canvas signature, Firestore, UX polish.
+ * Wedding invitation SPA — countdown, canvas signature, Firestore, i18n (AR/EN).
  */
 import { db } from './firebase.js';
-import {
-  collection,
-  addDoc,
-  query,
-  orderBy,
-  limit,
-  onSnapshot,
-  serverTimestamp,
-} from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
+import { TRANSLATIONS, STORAGE_KEY, isLocale } from './translations.js';
+import { collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
 
 /* -------------------------------------------------------------------------- */
 /* Config                                                                     */
@@ -43,10 +36,93 @@ const SELECTORS = {
   rsvpForm: '#rsvp-form',
   rsvpSubmit: '#rsvp-submit',
   rsvpStatus: '#rsvp-status',
-  wallLoading: '#guest-messages-loading',
-  wallEmpty: '#guest-messages-empty',
-  wallList: '#guest-messages-list',
 };
+
+/* -------------------------------------------------------------------------- */
+/* i18n                                                                       */
+/* -------------------------------------------------------------------------- */
+
+function getByPath(obj, path) {
+  if (!obj || !path) return undefined;
+  return path.split('.').reduce((acc, key) => (acc != null ? acc[key] : undefined), obj);
+}
+
+function getLocale() {
+  return document.documentElement.lang === 'en' ? 'en' : 'ar';
+}
+
+function formStrings() {
+  return TRANSLATIONS[getLocale()].forms;
+}
+
+function applyLanguage(lang) {
+  const next = isLocale(lang) ? lang : 'ar';
+  const root = document.documentElement;
+  root.lang = next;
+  root.dir = next === 'ar' ? 'rtl' : 'ltr';
+
+  try {
+    localStorage.setItem(STORAGE_KEY, next);
+  } catch (_) {}
+
+  const t = TRANSLATIONS[next];
+
+  document.title = t.meta.title;
+  const metaDesc = document.getElementById('meta-description');
+  if (metaDesc) metaDesc.setAttribute('content', t.meta.description);
+
+  document.querySelectorAll('[data-i18n]').forEach((el) => {
+    const path = el.getAttribute('data-i18n');
+    const val = getByPath(t, path);
+    if (val !== undefined) el.textContent = val;
+  });
+
+  document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+    const path = el.getAttribute('data-i18n-placeholder');
+    const val = getByPath(t, path);
+    if (val !== undefined) el.setAttribute('placeholder', val);
+  });
+
+  document.querySelectorAll('[data-i18n-attr]').forEach((el) => {
+    const raw = el.getAttribute('data-i18n-attr');
+    if (!raw) return;
+    raw.split('|').forEach((segment) => {
+      if (!segment.trim()) return;
+      const idx = segment.indexOf(':');
+      if (idx === -1) return;
+      const attr = segment.slice(0, idx).trim();
+      const path = segment.slice(idx + 1).trim();
+      const val = getByPath(t, path);
+      if (attr && val !== undefined) el.setAttribute(attr, val);
+    });
+  });
+
+  const langSwitch = document.getElementById('lang-switch');
+  langSwitch?.classList.toggle('lang-switch--ar', next === 'ar');
+  langSwitch?.classList.toggle('lang-switch--en', next === 'en');
+
+  langSwitch?.querySelectorAll('[data-set-lang]').forEach((btn) => {
+    const code = btn.getAttribute('data-set-lang');
+    btn.setAttribute('aria-pressed', code === next ? 'true' : 'false');
+  });
+}
+
+function initLanguageSwitcher() {
+  const wrap = document.getElementById('lang-switch');
+  if (!wrap) return;
+
+  wrap.querySelectorAll('[data-set-lang]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const next = btn.getAttribute('data-set-lang');
+      if (!isLocale(next)) return;
+      if (next === getLocale()) return;
+
+      document.body.classList.add('is-switching-lang');
+      applyLanguage(next);
+      window.setTimeout(() => document.body.classList.remove('is-switching-lang'), 280);
+    });
+  });
+}
 
 /* -------------------------------------------------------------------------- */
 /* Utilities                                                                  */
@@ -60,15 +136,6 @@ function pad2(n) {
   return String(n).padStart(2, '0');
 }
 
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-/** Debounce — resize handlers */
 function debounce(fn, ms) {
   let t;
   return (...args) => {
@@ -101,7 +168,6 @@ function initLoadingScreen() {
   };
 
   window.addEventListener('load', finish);
-  /** Fallback if `load` is delayed (slow CDN, blocked asset) */
   setTimeout(() => {
     if (!finished) finish();
   }, 4500);
@@ -338,19 +404,19 @@ async function submitGuestMessage(ev) {
   const submit = $(SELECTORS.msgSubmit);
   const nameInput = $('#msg-name');
   const textInput = $('#msg-text');
-  const canvas = $(SELECTORS.canvas);
+  const strings = formStrings();
 
   const text = (textInput?.value || '').trim();
   if (!text) {
     if (status) {
-      status.textContent = 'يرجى كتابة رسالة قبل الإرسال.';
+      status.textContent = strings.msgEmpty;
       status.classList.add('form-status--error');
     }
     textInput?.focus();
     return;
   }
 
-  const guestName = (nameInput?.value || '').trim() || 'ضيف كريم';
+  const guestName = (nameInput?.value || '').trim() || strings.defaultGuestName;
   const drawingData =
     signaturePad && typeof signaturePad.getDrawingPayload === 'function'
       ? signaturePad.getDrawingPayload()
@@ -371,7 +437,7 @@ async function submitGuestMessage(ev) {
     });
 
     if (status) {
-      status.textContent = 'شكراً — وصلت رسالتكم بلطف، وتُحفظ مع ذكرياتنا.';
+      status.textContent = strings.msgSuccess;
       status.classList.add('form-status--ok');
     }
     form.reset();
@@ -379,7 +445,7 @@ async function submitGuestMessage(ev) {
   } catch (err) {
     console.error(err);
     if (status) {
-      status.textContent = 'تعذر الإرسال مؤقتاً. حاولوا لاحقاً أو تحققوا من الاتصال.';
+      status.textContent = strings.msgError;
       status.classList.add('form-status--error');
     }
   } finally {
@@ -387,15 +453,15 @@ async function submitGuestMessage(ev) {
   }
 }
 
-function validateRsvp(form) {
+function validateRsvp(form, strings) {
   const name = ($('#rsvp-name')?.value || '').trim();
   const attend = form.querySelector('input[name="attend"]:checked')?.value;
   const guestCount = Number($('#rsvp-count')?.value);
 
-  if (!name) return 'يرجى إدخال الاسم.';
-  if (!attend) return 'يرجى اختيار الحضور (نعم أو لا).';
+  if (!name) return strings.rsvpName;
+  if (!attend) return strings.rsvpAttend;
   if (!Number.isFinite(guestCount) || guestCount < 1 || guestCount > 20) {
-    return 'عدد الضيوف يجب أن يكون بين ١ و ٢٠.';
+    return strings.rsvpCount;
   }
   return null;
 }
@@ -405,8 +471,9 @@ async function submitRsvp(ev) {
   const form = ev.target;
   const status = $(SELECTORS.rsvpStatus);
   const submit = $(SELECTORS.rsvpSubmit);
+  const strings = formStrings();
 
-  const err = validateRsvp(form);
+  const err = validateRsvp(form, strings);
   if (err) {
     if (status) {
       status.textContent = err;
@@ -437,102 +504,19 @@ async function submitRsvp(ev) {
     });
 
     if (status) {
-      status.textContent = 'تم استلام تأكيدكم — ننتظركم بشوق أو نشكر لطفكم.';
+      status.textContent = strings.rsvpSuccess;
       status.classList.add('form-status--ok');
     }
     form.reset();
   } catch (e) {
     console.error(e);
     if (status) {
-      status.textContent = 'تعذر حفظ التأكيد. حاولوا لاحقاً.';
+      status.textContent = strings.rsvpError;
       status.classList.add('form-status--error');
     }
   } finally {
     setButtonLoading(submit, false);
   }
-}
-
-/* -------------------------------------------------------------------------- */
-/* Guest messages wall                                                        */
-/* -------------------------------------------------------------------------- */
-
-function formatDate(ts) {
-  if (!ts?.toDate) return '';
-  const d = ts.toDate();
-  return new Intl.DateTimeFormat('ar-SA', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  }).format(d);
-}
-
-/** Allow only PNG data URLs from our canvas for safe <img src> */
-function isSafePngDataUrl(s) {
-  return (
-    typeof s === 'string' &&
-    s.startsWith('data:image/png;base64,') &&
-    s.length > 30 &&
-    s.length < 950000
-  );
-}
-
-function renderMessageCard(doc) {
-  const data = doc.data();
-  const li = document.createElement('li');
-  li.className = 'message-card glass-card';
-  li.dataset.id = doc.id;
-
-  const name = escapeHtml(data.guestName || 'ضيف');
-  const text = escapeHtml(data.text || '').replace(/\n/g, '<br />');
-  const dateStr = formatDate(data.createdAt);
-
-  const sigHtml =
-    isSafePngDataUrl(data.drawing) ? `<div class="message-card__sig"><img src="${data.drawing}" alt="" loading="lazy" decoding="async" /></div>` : '';
-
-  li.innerHTML = `
-    <div class="message-card__head">
-      <span class="message-card__name">${name}</span>
-      <time class="message-card__date" datetime="">${escapeHtml(dateStr)}</time>
-    </div>
-    <p class="message-card__text">${text}</p>
-    ${sigHtml}
-  `;
-  return li;
-}
-
-function initGuestWall() {
-  const list = $(SELECTORS.wallList);
-  const loadingEl = $(SELECTORS.wallLoading);
-  const emptyEl = $(SELECTORS.wallEmpty);
-  if (!list) return;
-
-  const qRef = query(collection(db, 'messages'), orderBy('createdAt', 'desc'), limit(24));
-
-  const unsub = onSnapshot(
-    qRef,
-    (snap) => {
-      if (loadingEl) loadingEl.classList.add('hidden');
-      list.innerHTML = '';
-
-      if (snap.empty) {
-        emptyEl?.classList.remove('hidden');
-        return;
-      }
-      emptyEl?.classList.add('hidden');
-
-      snap.forEach((docSnap) => {
-        list.appendChild(renderMessageCard(docSnap));
-      });
-    },
-    (err) => {
-      console.error(err);
-      if (loadingEl) {
-        loadingEl.textContent = 'تعذر تحميل الرسائل. تحققوا من القواعد أو الشبكة.';
-        loadingEl.classList.remove('hidden');
-      }
-    }
-  );
-
-  window.addEventListener('beforeunload', () => unsub());
 }
 
 /* -------------------------------------------------------------------------- */
@@ -563,6 +547,9 @@ function initRevealOnScroll() {
 /* -------------------------------------------------------------------------- */
 
 function boot() {
+  applyLanguage(getLocale());
+  initLanguageSwitcher();
+
   initLoadingScreen();
   createParticles();
   initSmoothScroll();
@@ -578,8 +565,6 @@ function boot() {
 
   $(SELECTORS.msgForm)?.addEventListener('submit', submitGuestMessage);
   $(SELECTORS.rsvpForm)?.addEventListener('submit', submitRsvp);
-
-  initGuestWall();
 }
 
 boot();
