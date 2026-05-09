@@ -18,7 +18,7 @@
   --glass: rgba(255, 255, 255, 0.82);
   --glass-border: rgba(212, 175, 55, 0.38);
   --shadow-soft: 0 24px 80px rgba(201, 162, 39, 0.16);
-  --shadow-card: 0 12px 36px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 12px 36px rgba(201, 162, 39, 0.1);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --font-display: 'Cormorant Garamond', 'Noto Naskh Arabic', serif;
   --font-body: 'Outfit', 'Noto Naskh Arabic', system-ui, sans-serif;
@@ -1182,11 +1182,11 @@ textarea {
 }
 
 .form-status--ok {
-  color: #7d8f6b;
+  color: #9a7d28;
 }
 
 .form-status--error {
-  color: #b07868;
+  color: #b8860b;
 }
 
 /* Footer */
