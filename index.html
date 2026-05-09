@@ -1,28 +1,32 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" translate="no" class="notranslate">
+<html lang="en" dir="ltr" translate="no" class="notranslate">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google" content="notranslate" />
     <meta name="googlebot" content="notranslate" />
-    <meta http-equiv="Content-Language" content="ar" id="meta-content-language" />
-    <meta name="description" content="دعوة زفاف فاخرة — ريم وعبدالرحمن" id="meta-description" />
-    <title>Wedding Invitation | ريم وعبدالرحمن</title>
+    <meta http-equiv="Content-Language" content="en" id="meta-content-language" />
+    <meta
+      name="description"
+      content="An elegant wedding invitation — Reem &amp; Abdulrahman"
+      id="meta-description"
+    />
+    <title>Wedding Invitation | Reem &amp; Abdulrahman</title>
     <script>
       (function () {
         try {
           var k = 'wedding-invitation-lang';
           var v = localStorage.getItem(k);
           var d = document.documentElement;
-          if (v === 'en') {
-            d.lang = 'en';
-            d.dir = 'ltr';
-          } else {
+          if (v === 'ar') {
             d.lang = 'ar';
             d.dir = 'rtl';
+          } else {
+            d.lang = 'en';
+            d.dir = 'ltr';
           }
           var cl = document.getElementById('meta-content-language');
-          if (cl) cl.setAttribute('content', v === 'en' ? 'en' : 'ar');
+          if (cl) cl.setAttribute('content', v === 'ar' ? 'ar' : 'en');
         } catch (e) {}
       })();
     </script>
@@ -39,7 +43,7 @@
     <div id="loading-screen" class="loading-screen" aria-hidden="false">
       <div class="loading-inner">
         <div class="loading-monogram" aria-hidden="true">∞</div>
-        <p class="loading-text" data-i18n="loading.text">ننتظر لحظتكم الجميلة</p>
+        <p class="loading-text" data-i18n="loading.text">Awaiting your beautiful moment</p>
         <div class="loading-bar"><span class="loading-bar-fill"></span></div>
       </div>
     </div>
@@ -54,8 +58,8 @@
       id="music-toggle"
       aria-pressed="false"
       data-i18n-attr="aria-label:music.ariaLabel|title:music.title"
-      aria-label="تشغيل أو إيقاف الموسيقى الخلفية"
-      title="الموسيقى"
+      aria-label="Play or pause background music"
+      title="Music"
     >
       <span class="music-icon music-off" aria-hidden="true">♪</span>
       <span class="music-icon music-on" aria-hidden="true">♫</span>
@@ -67,20 +71,20 @@
 
     <header class="site-header">
       <nav class="nav-bar glass" aria-label="Main">
-        <a href="#hero" class="nav-brand" data-i18n="nav.brand">زفاف</a>
+        <a href="#hero" class="nav-brand" data-i18n="nav.brand">Wedding</a>
         <ul class="nav-links">
-          <li><a href="#countdown" data-i18n="nav.countdown">العد التنازلي</a></li>
-          <li><a href="#venue" data-i18n="nav.venue">المكان</a></li>
-          <li><a href="#messages-form" data-i18n="nav.message">رسالة</a></li>
-          <li><a href="#rsvp" data-i18n="nav.rsvp">تأكيد الحضور</a></li>
+          <li><a href="#countdown" data-i18n="nav.countdown">Countdown</a></li>
+          <li><a href="#venue" data-i18n="nav.venue">Venue</a></li>
+          <li><a href="#messages-form" data-i18n="nav.message">Message</a></li>
+          <li><a href="#rsvp" data-i18n="nav.rsvp">RSVP</a></li>
         </ul>
         <div class="nav-toolbar">
           <div
-            class="lang-switch lang-switch--ar"
+            class="lang-switch lang-switch--en"
             id="lang-switch"
             role="group"
             data-i18n-attr="aria-label:langSwitcher.ariaLabel"
-            aria-label="اختيار اللغة"
+            aria-label="Choose language: Arabic or English"
           >
             <span class="lang-switch__thumb" aria-hidden="true"></span>
             <button
@@ -88,9 +92,9 @@
               class="lang-switch__btn"
               data-set-lang="ar"
               data-i18n-attr="aria-label:langSwitcher.btnArAria|title:langSwitcher.btnArAria"
-              aria-pressed="true"
-              aria-label="العربية"
-              title="العربية"
+              aria-pressed="false"
+              aria-label="Arabic"
+              title="Arabic"
             >
               AR
             </button>
@@ -99,7 +103,7 @@
               class="lang-switch__btn"
               data-set-lang="en"
               data-i18n-attr="aria-label:langSwitcher.btnEnAria|title:langSwitcher.btnEnAria"
-              aria-pressed="false"
+              aria-pressed="true"
               aria-label="English"
               title="English"
             >
@@ -111,7 +115,7 @@
             class="nav-toggle"
             id="nav-toggle"
             data-i18n-attr="aria-label:nav.menuAria"
-            aria-label="القائمة"
+            aria-label="Menu"
             aria-expanded="false"
           >
             <span></span><span></span><span></span>
@@ -129,14 +133,14 @@
           <div class="hero-glow hero-glow--2"></div>
         </div>
         <div class="hero-content">
-          <p class="hero-kicker animate-in" data-i18n="hero.kicker">بكل حب ووفاء</p>
-          <h1 class="hero-title animate-in animate-in--delay-1" data-i18n="hero.invitationTitle">دعوة زفاف</h1>
-          <p class="hero-couple-names animate-in animate-in--delay-2" data-i18n="hero.coupleNames">ريم & عبدالرحمن</p>
+          <p class="hero-kicker animate-in" data-i18n="hero.kicker">With love and devotion</p>
+          <h1 class="hero-title animate-in animate-in--delay-1" data-i18n="hero.invitationTitle">Wedding Invitation</h1>
+          <p class="hero-couple-names animate-in animate-in--delay-2" data-i18n="hero.coupleNames">Reem &amp; Abdulrahman</p>
           <p class="hero-subtitle animate-in animate-in--delay-3" data-i18n="hero.subtitle">
-            ندعوكم لاستكمال قصة الحب بلمسة من النور، حيث يلتقي القلبان تحت سماء من الحرير والنجوم.
+            We invite you to continue our love story in a glow of light — two hearts meeting beneath a sky of silk and stars.
           </p>
           <a href="#countdown" class="cta-btn animate-in animate-in--delay-4">
-            <span data-i18n="hero.cta">اكتشف التفاصيل</span>
+            <span data-i18n="hero.cta">Discover the details</span>
             <span class="cta-shine"></span>
           </a>
         </div>
@@ -146,27 +150,27 @@
       <section id="countdown" class="countdown-section section-reveal">
         <div class="container">
           <header class="section-head">
-            <p class="section-couple-line" data-i18n="countdown.coupleLine">ريم & عبدالرحمن</p>
-            <p class="section-eyebrow" data-i18n="countdown.eyebrow">حتى ليلة العمر</p>
-            <h2 class="section-title" data-i18n="countdown.title">العد التنازلي</h2>
-            <p class="section-desc" data-i18n="countdown.desc">٥ يونيو — الساعة ٩ مساءً</p>
+            <p class="section-couple-line" data-i18n="countdown.coupleLine">Reem &amp; Abdulrahman</p>
+            <p class="section-eyebrow" data-i18n="countdown.eyebrow">Until our forever night</p>
+            <h2 class="section-title" data-i18n="countdown.title">Countdown</h2>
+            <p class="section-desc" data-i18n="countdown.desc">June 5 · 9:00 PM</p>
           </header>
           <div class="countdown-grid" id="countdown-grid" role="timer" aria-live="polite">
             <div class="count-card glass-card">
               <span class="count-value" id="cd-days">00</span>
-              <span class="count-label"><span data-i18n="countdown.days">أيام</span></span>
+              <span class="count-label"><span data-i18n="countdown.days">Days</span></span>
             </div>
             <div class="count-card glass-card">
               <span class="count-value" id="cd-hours">00</span>
-              <span class="count-label"><span data-i18n="countdown.hours">ساعات</span></span>
+              <span class="count-label"><span data-i18n="countdown.hours">Hours</span></span>
             </div>
             <div class="count-card glass-card">
               <span class="count-value" id="cd-minutes">00</span>
-              <span class="count-label"><span data-i18n="countdown.minutes">دقائق</span></span>
+              <span class="count-label"><span data-i18n="countdown.minutes">Minutes</span></span>
             </div>
             <div class="count-card glass-card">
               <span class="count-value" id="cd-seconds">00</span>
-              <span class="count-label"><span data-i18n="countdown.seconds">ثوانٍ</span></span>
+              <span class="count-label"><span data-i18n="countdown.seconds">Seconds</span></span>
             </div>
           </div>
         </div>
@@ -176,10 +180,10 @@
       <section id="venue" class="venue-section section-reveal">
         <div class="container venue-layout">
           <div class="venue-copy">
-            <p class="section-eyebrow" data-i18n="venue.eyebrow">أين تلتقي القلوب</p>
-            <h2 class="section-title" data-i18n="venue.title">قاعة الاحتفال</h2>
+            <p class="section-eyebrow" data-i18n="venue.eyebrow">Where hearts meet</p>
+            <h2 class="section-title" data-i18n="venue.title">The celebration hall</h2>
             <p class="venue-text" data-i18n="venue.text">
-              في فضاء صُمم للضوء الناعم والذكريات الدائمة، نستقبلكم في أجواء راقية تجمع بين البساطة والفخامة.
+              In a space shaped for soft light and lasting memories, we welcome you to an atmosphere that blends simplicity with luxury.
             </p>
             <a
               class="map-btn"
@@ -187,7 +191,7 @@
               target="_blank"
               rel="noopener noreferrer"
             >
-              <span data-i18n="venue.mapBtn">فتح الموقع على خرائط Google</span>
+              <span data-i18n="venue.mapBtn">Open location in Google Maps</span>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path
                   d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
@@ -199,8 +203,8 @@
           <div class="venue-visual glass-card">
             <div class="venue-frame">
               <div class="venue-shimmer"></div>
-              <p class="venue-placeholder" data-i18n="venue.placeholder">الخريطة تنتظر خطواتكم</p>
-              <p class="venue-placeholder-sub" data-i18n="venue.placeholderSub">وصولكم يكمّل القصة.</p>
+              <p class="venue-placeholder" data-i18n="venue.placeholder">The map awaits your steps</p>
+              <p class="venue-placeholder-sub" data-i18n="venue.placeholderSub">Your arrival completes the story.</p>
             </div>
           </div>
         </div>
@@ -210,42 +214,42 @@
       <section id="messages-form" class="messages-form-section section-reveal">
         <div class="container narrow">
           <header class="section-head">
-            <p class="section-eyebrow" data-i18n="messages.eyebrow">رسالة من القلب</p>
-            <h2 class="section-title" data-i18n="messages.title">أهدونا كلماتكم</h2>
+            <p class="section-eyebrow" data-i18n="messages.eyebrow">From the heart</p>
+            <h2 class="section-title" data-i18n="messages.title">Leave us a few words</h2>
             <p class="section-desc" data-i18n="messages.desc">
-              اكتبوا لنا أمنية، أو ارسموا توقيعاً دافئاً — كل لمسة تُحفظ بحب.
+              Share a wish or sketch a warm signature — every gesture is kept with love.
             </p>
           </header>
           <form id="guest-message-form" class="glass-card form-card" novalidate>
             <label class="field">
-              <span class="field-label" data-i18n="messages.nameLabel">اسمكم الطيب</span>
+              <span class="field-label" data-i18n="messages.nameLabel">Your name</span>
               <input
                 type="text"
                 name="guestName"
                 id="msg-name"
                 maxlength="120"
                 data-i18n-placeholder="messages.namePlaceholder"
-                placeholder="مثال: سارة وعمر"
+                placeholder="e.g. Sara &amp; Omar"
                 autocomplete="name"
               />
             </label>
             <label class="field">
-              <span class="field-label" data-i18n="messages.messageLabel">رسالتكم</span>
+              <span class="field-label" data-i18n="messages.messageLabel">Your message</span>
               <textarea
                 name="message"
                 id="msg-text"
                 rows="4"
                 maxlength="1500"
                 data-i18n-placeholder="messages.messagePlaceholder"
-                placeholder="من قلبٍ إلى قلبٍ… دعواتكم تُضيء يومنا."
+                placeholder="Heart to heart… your wishes brighten our day."
                 required
               ></textarea>
             </label>
             <div class="canvas-block">
               <div class="canvas-head">
-                <span class="field-label" data-i18n="messages.canvasLabel">توقيع أو رسم (اختياري)</span>
+                <span class="field-label" data-i18n="messages.canvasLabel">Signature or sketch (optional)</span>
                 <button type="button" class="text-btn" id="canvas-clear" data-i18n="messages.canvasClear">
-                  مسح اللوحة
+                  Clear pad
                 </button>
               </div>
               <canvas
@@ -254,14 +258,14 @@
                 height="220"
                 class="signature-pad"
                 data-i18n-attr="aria-label:messages.canvasAria"
-                aria-label="منطقة الرسم والتوقيع"
+                aria-label="Drawing and signature area"
               ></canvas>
               <p class="canvas-hint" data-i18n="messages.canvasHint">
-                اسحبوا بإصبعكم أو القلم على الشاشة — نحفظ الرسم كصورة.
+                Draw with finger or stylus — we save your sketch as an image.
               </p>
             </div>
             <button type="submit" class="submit-btn" id="msg-submit">
-              <span class="btn-label" data-i18n="messages.submit">إرسال الرسالة</span>
+              <span class="btn-label" data-i18n="messages.submit">Send message</span>
               <span class="btn-spinner" aria-hidden="true"></span>
             </button>
             <p class="form-status" id="msg-status" role="status" aria-live="polite"></p>
@@ -273,16 +277,16 @@
       <section id="rsvp" class="rsvp-section section-reveal">
         <div class="container narrow">
           <header class="section-head">
-            <p class="section-eyebrow" data-i18n="rsvp.eyebrow">تأكيد الحضور</p>
-            <h2 class="section-title" data-i18n="rsvp.title">تأكيد الحضور</h2>
+            <p class="section-eyebrow" data-i18n="rsvp.eyebrow">RSVP</p>
+            <h2 class="section-title" data-i18n="rsvp.title">RSVP</h2>
             <p class="section-desc" data-i18n="rsvp.desc">
-              يسرّنا معرفة إن كنتم معنا في هذه الأمسية، لنرتب لكم أجمل استقبال.
+              We would love to know if you will join us this evening so we can prepare the warmest welcome.
             </p>
           </header>
           <form id="rsvp-form" class="glass-card form-card" novalidate>
             <label class="field">
               <span class="field-label">
-                <span data-i18n="rsvp.nameLabel">الاسم الكريم</span>
+                <span data-i18n="rsvp.nameLabel">Full name</span>
                 <span class="req">*</span>
               </span>
               <input
@@ -292,29 +296,29 @@
                 maxlength="120"
                 required
                 data-i18n-placeholder="rsvp.namePlaceholder"
-                placeholder="الاسم الثلاثي"
+                placeholder="Full name"
                 autocomplete="name"
               />
             </label>
             <fieldset class="field field-radio">
               <legend class="field-label">
-                <span data-i18n="rsvp.attendLegend">هل ستحضرون؟</span>
+                <span data-i18n="rsvp.attendLegend">Will you attend?</span>
                 <span class="req">*</span>
               </legend>
               <div class="radio-row">
                 <label class="radio-pill">
                   <input type="radio" name="attend" value="yes" required />
-                  <span data-i18n="rsvp.yes">نعم</span>
+                  <span data-i18n="rsvp.yes">Yes</span>
                 </label>
                 <label class="radio-pill">
                   <input type="radio" name="attend" value="no" />
-                  <span data-i18n="rsvp.no">لا</span>
+                  <span data-i18n="rsvp.no">No</span>
                 </label>
               </div>
             </fieldset>
             <label class="field">
               <span class="field-label">
-                <span data-i18n="rsvp.guestCountLabel">عدد الضيوف</span>
+                <span data-i18n="rsvp.guestCountLabel">Number of guests</span>
                 <span class="req">*</span>
               </span>
               <input
@@ -330,18 +334,18 @@
               />
             </label>
             <label class="field">
-              <span class="field-label" data-i18n="rsvp.noteLabel">ملاحظة (اختياري)</span>
+              <span class="field-label" data-i18n="rsvp.noteLabel">Note (optional)</span>
               <textarea
                 name="note"
                 id="rsvp-note"
                 rows="3"
                 maxlength="800"
                 data-i18n-placeholder="rsvp.notePlaceholder"
-                placeholder="حساسية غذائية، مقعد، أو أي تفاصيل تهمكم"
+                placeholder="Dietary needs, seating, or anything we should know"
               ></textarea>
             </label>
             <button type="submit" class="submit-btn" id="rsvp-submit">
-              <span class="btn-label" data-i18n="rsvp.submit">إرسال التأكيد</span>
+              <span class="btn-label" data-i18n="rsvp.submit">Submit RSVP</span>
               <span class="btn-spinner" aria-hidden="true"></span>
             </button>
             <p class="form-status" id="rsvp-status" role="status" aria-live="polite"></p>
@@ -353,9 +357,9 @@
       <footer class="site-footer">
         <div class="footer-inner glass">
           <p class="footer-line" data-i18n="footer.line">
-            بحبٍ يفوق الكلمات، ننتظركم في أمسية تُشبه الحلم.
+            With love beyond words — we await you in an evening shaped like a dream.
           </p>
-          <p class="footer-meta" data-i18n="footer.meta">دعوة زفاف · ٢٠٢٦</p>
+          <p class="footer-meta" data-i18n="footer.meta">Wedding Invitation · 2026</p>
         </div>
       </footer>
     </main>

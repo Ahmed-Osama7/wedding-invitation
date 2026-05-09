@@ -5,6 +5,9 @@
 
 export const STORAGE_KEY = 'wedding-invitation-lang';
 
+/** Default UI language when nothing is stored yet */
+export const DEFAULT_LANG = 'en';
+
 export const TRANSLATIONS = {
   ar: {
     meta: {

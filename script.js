@@ -2,7 +2,7 @@
  * Wedding invitation SPA — countdown, canvas signature, Firestore, i18n (AR/EN).
  */
 import { db } from './firebase.js';
-import { TRANSLATIONS, STORAGE_KEY, isLocale } from './translations.js';
+import { TRANSLATIONS, STORAGE_KEY, isLocale, DEFAULT_LANG } from './translations.js';
 import { collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
 
 /* -------------------------------------------------------------------------- */
@@ -57,15 +57,16 @@ function getLocale() {
   return 'ar';
 }
 
-/** Prefer stored preference so UI matches after offline edits to HTML defaults */
+/** Stored choice wins; otherwise site default is English */
 function resolveInitialLang() {
   try {
     const s = localStorage.getItem(STORAGE_KEY);
-    if (isLocale(s)) return s;
+    if (s === 'ar') return 'ar';
+    if (s === 'en') return 'en';
   } catch (_) {
     /* ignore */
   }
-  return getLocale();
+  return DEFAULT_LANG;
 }
 
 function formStrings() {
@@ -73,7 +74,7 @@ function formStrings() {
 }
 
 function applyLanguage(lang) {
-  const next = isLocale(lang) ? lang : 'ar';
+  const next = isLocale(lang) ? lang : DEFAULT_LANG;
   const root = document.documentElement;
   const dir = next === 'ar' ? 'rtl' : 'ltr';
   root.lang = next;
@@ -138,17 +139,19 @@ function initLanguageSwitcher() {
   const wrap = document.getElementById('lang-switch');
   if (!wrap) return;
 
-  wrap.addEventListener('click', (e) => {
-    const btn = e.target.closest('button[data-set-lang]');
-    if (!btn || !wrap.contains(btn)) return;
+  /** Direct listeners avoid failures when event.target is a text node (no .closest) */
+  wrap.querySelectorAll('button[data-set-lang]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const next = btn.getAttribute('data-set-lang');
+      if (!isLocale(next)) return;
+      if (next === getLocale()) return;
 
-    const next = btn.getAttribute('data-set-lang');
-    if (!isLocale(next)) return;
-    if (next === getLocale()) return;
-
-    document.body.classList.add('is-switching-lang');
-    applyLanguage(next);
-    window.setTimeout(() => document.body.classList.remove('is-switching-lang'), 280);
+      document.body.classList.add('is-switching-lang');
+      applyLanguage(next);
+      window.setTimeout(() => document.body.classList.remove('is-switching-lang'), 280);
+    });
   });
 }
 
