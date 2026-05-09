@@ -1,9 +1,30 @@
 /**
  * Wedding invitation SPA — countdown, canvas signature, Firestore, i18n (AR/EN).
+ * Firebase loads only when submitting forms so i18n/UI still run if CDN is slow or blocked.
  */
-import { db } from './firebase.js';
 import { TRANSLATIONS, STORAGE_KEY, isLocale, DEFAULT_LANG } from './translations.js';
-import { collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
+
+const FIRESTORE_URL = 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
+
+let firestoreApiPromise = null;
+
+async function loadFirestoreApi() {
+  if (!firestoreApiPromise) {
+    firestoreApiPromise = (async () => {
+      const [{ db }, firestoreMod] = await Promise.all([
+        import('./firebase.js'),
+        import(FIRESTORE_URL),
+      ]);
+      return {
+        db,
+        collection: firestoreMod.collection,
+        addDoc: firestoreMod.addDoc,
+        serverTimestamp: firestoreMod.serverTimestamp,
+      };
+    })();
+  }
+  return firestoreApiPromise;
+}
 
 /* -------------------------------------------------------------------------- */
 /* Config                                                                     */
@@ -142,8 +163,6 @@ function initLanguageSwitcher() {
   /** Direct listeners avoid failures when event.target is a text node (no .closest) */
   wrap.querySelectorAll('button[data-set-lang]').forEach((btn) => {
     btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
       const next = btn.getAttribute('data-set-lang');
       if (!isLocale(next)) return;
       if (next === getLocale()) return;
@@ -460,6 +479,7 @@ async function submitGuestMessage(ev) {
   }
 
   try {
+    const { db, collection, addDoc, serverTimestamp } = await loadFirestoreApi();
     await addDoc(collection(db, 'messages'), {
       guestName,
       text,
@@ -526,6 +546,7 @@ async function submitRsvp(ev) {
   }
 
   try {
+    const { db, collection, addDoc, serverTimestamp } = await loadFirestoreApi();
     await addDoc(collection(db, 'rsvps'), {
       name,
       attend,

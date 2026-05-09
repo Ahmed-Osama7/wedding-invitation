@@ -37,6 +37,52 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
+    <!-- Inline fallback so AR/EN never show as default white browser buttons if CSS is stale -->
+    <style id="lang-switch-critical">
+      nav.nav-bar #lang-switch.lang-switch {
+        position: relative;
+        z-index: 5;
+        display: inline-flex;
+        align-items: stretch;
+        padding: 3px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(12, 8, 11, 0.55);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+      }
+      nav.nav-bar #lang-switch .lang-switch__thumb {
+        border-radius: 999px;
+        border: 1px solid rgba(201, 169, 98, 0.45);
+        background: linear-gradient(
+          165deg,
+          rgba(201, 169, 98, 0.22) 0%,
+          rgba(232, 180, 184, 0.08) 50%,
+          rgba(255, 255, 255, 0.04) 100%
+        );
+      }
+      nav.nav-bar #lang-switch button.lang-switch__btn {
+        -webkit-appearance: none !important;
+        appearance: none !important;
+        margin: 0 !important;
+        border: 0 !important;
+        border-radius: 999px !important;
+        background: transparent !important;
+        background-image: none !important;
+        box-shadow: none !important;
+        color: rgba(247, 239, 232, 0.45) !important;
+        font-family: Outfit, system-ui, sans-serif !important;
+        font-size: 0.62rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.18em !important;
+        cursor: pointer !important;
+      }
+      nav.nav-bar #lang-switch button.lang-switch__btn[aria-pressed='true'] {
+        color: #c9a962 !important;
+        text-shadow: 0 0 18px rgba(201, 169, 98, 0.35);
+      }
+    </style>
   </head>
   <body translate="no" class="notranslate">
     <!-- Loading screen -->
@@ -65,8 +111,8 @@
       <span class="music-icon music-on" aria-hidden="true">♫</span>
     </button>
 
-    <audio id="bg-audio" loop preload="none">
-      <source src="" type="audio/mpeg" />
+    <audio id="bg-audio" loop preload="metadata">
+      <source src="music/wedding-music.mp3" type="audio/mpeg" />
     </audio>
 
     <header class="site-header">
