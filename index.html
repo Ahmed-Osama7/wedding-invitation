@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" translate="no" class="notranslate">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google" content="notranslate" />
+    <meta name="googlebot" content="notranslate" />
+    <meta http-equiv="Content-Language" content="ar" id="meta-content-language" />
     <meta name="description" content="دعوة زفاف فاخرة — ريم وعبدالرحمن" id="meta-description" />
     <title>Wedding Invitation | ريم وعبدالرحمن</title>
     <script>
@@ -18,6 +21,8 @@
             d.lang = 'ar';
             d.dir = 'rtl';
           }
+          var cl = document.getElementById('meta-content-language');
+          if (cl) cl.setAttribute('content', v === 'en' ? 'en' : 'ar');
         } catch (e) {}
       })();
     </script>
@@ -29,7 +34,7 @@
     />
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body>
+  <body translate="no" class="notranslate">
     <!-- Loading screen -->
     <div id="loading-screen" class="loading-screen" aria-hidden="false">
       <div class="loading-inner">
@@ -63,37 +68,55 @@
     <header class="site-header">
       <nav class="nav-bar glass" aria-label="Main">
         <a href="#hero" class="nav-brand" data-i18n="nav.brand">زفاف</a>
-        <div
-          class="lang-switch lang-switch--ar"
-          id="lang-switch"
-          role="group"
-          data-i18n-attr="aria-label:langSwitcher.ariaLabel"
-          aria-label="اختيار اللغة"
-        >
-          <span class="lang-switch__thumb" aria-hidden="true"></span>
-          <button type="button" class="lang-switch__btn" data-set-lang="ar" aria-pressed="true">
-            العربية
-          </button>
-          <button type="button" class="lang-switch__btn" data-set-lang="en" aria-pressed="false">
-            English
-          </button>
-        </div>
         <ul class="nav-links">
           <li><a href="#countdown" data-i18n="nav.countdown">العد التنازلي</a></li>
           <li><a href="#venue" data-i18n="nav.venue">المكان</a></li>
           <li><a href="#messages-form" data-i18n="nav.message">رسالة</a></li>
           <li><a href="#rsvp" data-i18n="nav.rsvp">تأكيد الحضور</a></li>
         </ul>
-        <button
-          type="button"
-          class="nav-toggle"
-          id="nav-toggle"
-          data-i18n-attr="aria-label:nav.menuAria"
-          aria-label="القائمة"
-          aria-expanded="false"
-        >
-          <span></span><span></span><span></span>
-        </button>
+        <div class="nav-toolbar">
+          <div
+            class="lang-switch lang-switch--ar"
+            id="lang-switch"
+            role="group"
+            data-i18n-attr="aria-label:langSwitcher.ariaLabel"
+            aria-label="اختيار اللغة"
+          >
+            <span class="lang-switch__thumb" aria-hidden="true"></span>
+            <button
+              type="button"
+              class="lang-switch__btn"
+              data-set-lang="ar"
+              data-i18n-attr="aria-label:langSwitcher.btnArAria|title:langSwitcher.btnArAria"
+              aria-pressed="true"
+              aria-label="العربية"
+              title="العربية"
+            >
+              AR
+            </button>
+            <button
+              type="button"
+              class="lang-switch__btn"
+              data-set-lang="en"
+              data-i18n-attr="aria-label:langSwitcher.btnEnAria|title:langSwitcher.btnEnAria"
+              aria-pressed="false"
+              aria-label="English"
+              title="English"
+            >
+              EN
+            </button>
+          </div>
+          <button
+            type="button"
+            class="nav-toggle"
+            id="nav-toggle"
+            data-i18n-attr="aria-label:nav.menuAria"
+            aria-label="القائمة"
+            aria-expanded="false"
+          >
+            <span></span><span></span><span></span>
+          </button>
+        </div>
       </nav>
     </header>
 

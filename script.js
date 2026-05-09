@@ -71,6 +71,9 @@ function applyLanguage(lang) {
   const metaDesc = document.getElementById('meta-description');
   if (metaDesc) metaDesc.setAttribute('content', t.meta.description);
 
+  const metaCl = document.getElementById('meta-content-language');
+  if (metaCl) metaCl.setAttribute('content', next);
+
   document.querySelectorAll('[data-i18n]').forEach((el) => {
     const path = el.getAttribute('data-i18n');
     const val = getByPath(t, path);
@@ -104,6 +107,10 @@ function applyLanguage(lang) {
   langSwitch?.querySelectorAll('[data-set-lang]').forEach((btn) => {
     const code = btn.getAttribute('data-set-lang');
     btn.setAttribute('aria-pressed', code === next ? 'true' : 'false');
+  });
+
+  window.requestAnimationFrame(() => {
+    window.dispatchEvent(new Event('resize'));
   });
 }
 

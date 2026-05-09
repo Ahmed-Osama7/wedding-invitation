@@ -19,7 +19,9 @@ export const TRANSLATIONS = {
       title: 'الموسيقى',
     },
     langSwitcher: {
-      ariaLabel: 'اختيار اللغة',
+      ariaLabel: 'اختيار اللغة: العربية أو الإنجليزية',
+      btnArAria: 'العربية',
+      btnEnAria: 'English',
     },
     nav: {
       brand: 'زفاف',
@@ -114,7 +116,9 @@ export const TRANSLATIONS = {
       title: 'Music',
     },
     langSwitcher: {
-      ariaLabel: 'Choose language',
+      ariaLabel: 'Choose language: Arabic or English',
+      btnArAria: 'Arabic',
+      btnEnAria: 'English',
     },
     nav: {
       brand: 'Wedding',
