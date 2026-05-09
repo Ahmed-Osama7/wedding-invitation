@@ -48,7 +48,24 @@ function getByPath(obj, path) {
 }
 
 function getLocale() {
-  return document.documentElement.lang === 'en' ? 'en' : 'ar';
+  const raw =
+    document.documentElement.getAttribute('lang') ||
+    document.documentElement.lang ||
+    '';
+  const lower = String(raw).toLowerCase();
+  if (lower.startsWith('en')) return 'en';
+  return 'ar';
+}
+
+/** Prefer stored preference so UI matches after offline edits to HTML defaults */
+function resolveInitialLang() {
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if (isLocale(s)) return s;
+  } catch (_) {
+    /* ignore */
+  }
+  return getLocale();
 }
 
 function formStrings() {
@@ -58,8 +75,11 @@ function formStrings() {
 function applyLanguage(lang) {
   const next = isLocale(lang) ? lang : 'ar';
   const root = document.documentElement;
+  const dir = next === 'ar' ? 'rtl' : 'ltr';
   root.lang = next;
-  root.dir = next === 'ar' ? 'rtl' : 'ltr';
+  root.dir = dir;
+  root.setAttribute('lang', next);
+  root.setAttribute('dir', dir);
 
   try {
     localStorage.setItem(STORAGE_KEY, next);
@@ -118,16 +138,17 @@ function initLanguageSwitcher() {
   const wrap = document.getElementById('lang-switch');
   if (!wrap) return;
 
-  wrap.querySelectorAll('[data-set-lang]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const next = btn.getAttribute('data-set-lang');
-      if (!isLocale(next)) return;
-      if (next === getLocale()) return;
+  wrap.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-set-lang]');
+    if (!btn || !wrap.contains(btn)) return;
 
-      document.body.classList.add('is-switching-lang');
-      applyLanguage(next);
-      window.setTimeout(() => document.body.classList.remove('is-switching-lang'), 280);
-    });
+    const next = btn.getAttribute('data-set-lang');
+    if (!isLocale(next)) return;
+    if (next === getLocale()) return;
+
+    document.body.classList.add('is-switching-lang');
+    applyLanguage(next);
+    window.setTimeout(() => document.body.classList.remove('is-switching-lang'), 280);
   });
 }
 
@@ -554,7 +575,7 @@ function initRevealOnScroll() {
 /* -------------------------------------------------------------------------- */
 
 function boot() {
-  applyLanguage(getLocale());
+  applyLanguage(resolveInitialLang());
   initLanguageSwitcher();
 
   initLoadingScreen();
