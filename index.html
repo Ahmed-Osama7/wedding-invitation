@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <meta name="google" content="notranslate" />
     <meta name="googlebot" content="notranslate" />
     <meta http-equiv="Content-Language" content="en" id="meta-content-language" />
@@ -12,6 +15,32 @@
       id="meta-description"
     />
     <title>Wedding Invitation | Reem &amp; Abdulrahman</title>
+    <!-- Bump this value on every deploy so cached clients fetch new CSS/JS (see inline scripts below). -->
+    <meta name="site-asset-version" content="202602101" />
+    <script>
+      (function () {
+        try {
+          var meta = document.querySelector('meta[name="site-asset-version"]');
+          var current = meta ? meta.getAttribute('content') || '1' : '1';
+          window.__SITE_ASSET_VERSION__ = current;
+          var key = 'wedding-site-asset-version';
+          var stored = localStorage.getItem(key);
+          if (stored !== null && stored !== current) {
+            localStorage.setItem(key, current);
+            window.location.reload();
+            return;
+          }
+          localStorage.setItem(key, current);
+        } catch (e) {
+          try {
+            var m = document.querySelector('meta[name="site-asset-version"]');
+            window.__SITE_ASSET_VERSION__ = m ? m.getAttribute('content') || '1' : '1';
+          } catch (_) {
+            window.__SITE_ASSET_VERSION__ = '1';
+          }
+        }
+      })();
+    </script>
     <script>
       (function () {
         try {
@@ -36,7 +65,14 @@
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Outfit:wght@300;400;500;600&family=Noto+Naskh+Arabic:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css" id="site-main-css" />
+    <script>
+      (function () {
+        var v = window.__SITE_ASSET_VERSION__ || '1';
+        var link = document.getElementById('site-main-css');
+        if (link) link.href = 'style.css?v=' + encodeURIComponent(v);
+      })();
+    </script>
     <!-- Inline fallback so AR/EN never show as default white browser buttons if CSS is stale -->
     <style id="lang-switch-critical">
       nav.nav-bar #lang-switch.lang-switch {
@@ -159,8 +195,15 @@
     </button>
 
     <audio id="bg-audio" loop preload="metadata">
-      <source src="music/wedding-music.mp3" type="audio/mpeg" />
+      <source id="bg-audio-source" src="music/wedding-music.mp3" type="audio/mpeg" />
     </audio>
+    <script>
+      (function () {
+        var src = document.getElementById('bg-audio-source');
+        var v = window.__SITE_ASSET_VERSION__ || '1';
+        if (src) src.src = 'music/wedding-music.mp3?v=' + encodeURIComponent(v);
+      })();
+    </script>
 
     <header class="site-header">
       <nav class="nav-bar glass" aria-label="Main">
@@ -458,6 +501,14 @@
     </main>
     </div>
 
-    <script type="module" src="script.js"></script>
+    <script>
+      (function () {
+        var v = window.__SITE_ASSET_VERSION__ || '1';
+        var s = document.createElement('script');
+        s.type = 'module';
+        s.src = 'script.js?v=' + encodeURIComponent(v);
+        document.body.appendChild(s);
+      })();
+    </script>
   </body>
 </html>

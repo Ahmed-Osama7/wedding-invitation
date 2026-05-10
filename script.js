@@ -1,8 +1,17 @@
 /**
  * Wedding invitation SPA — countdown, canvas signature, Firestore, i18n (AR/EN).
  * Firebase loads only when submitting forms so i18n/UI still run if CDN is slow or blocked.
+ *
+ * Asset URLs use ?v= from index.html meta[name="site-asset-version"] (cache busting).
  */
-import { TRANSLATIONS, STORAGE_KEY, isLocale, DEFAULT_LANG } from './translations.js';
+const ASSET_VER =
+  typeof window !== 'undefined' && window.__SITE_ASSET_VERSION__
+    ? String(window.__SITE_ASSET_VERSION__)
+    : '1';
+
+const { TRANSLATIONS, STORAGE_KEY, isLocale, DEFAULT_LANG } = await import(
+  `./translations.js?v=${encodeURIComponent(ASSET_VER)}`
+);
 
 const FIRESTORE_URL = 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
 
@@ -12,7 +21,7 @@ async function loadFirestoreApi() {
   if (!firestoreApiPromise) {
     firestoreApiPromise = (async () => {
       const [{ db }, firestoreMod] = await Promise.all([
-        import('./firebase.js'),
+        import(`./firebase.js?v=${encodeURIComponent(ASSET_VER)}`),
         import(FIRESTORE_URL),
       ]);
       return {
