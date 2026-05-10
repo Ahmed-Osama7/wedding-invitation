@@ -180,18 +180,25 @@ a {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: linear-gradient(135deg, #ffffff 0%, #fdf0f3 40%, #f5d5de 70%, #c4607a 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #f5e8eb 30%, #8b2040 60%, #5a0f20 80%, #3d0014 100%);
   animation: bridal-wash-shift 32s ease-in-out infinite alternate;
 }
 
 @keyframes bridal-wash-shift {
   0%,
   100% {
-    background: linear-gradient(135deg, #ffffff 0%, #fdf0f3 40%, #f5d5de 70%, #c4607a 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #f5e8eb 30%, #8b2040 60%, #5a0f20 80%, #3d0014 100%);
   }
 
   50% {
-    background: linear-gradient(155deg, #ffffff 0%, #fce8ed 35%, #f0c0ce 65%, #8b1a3a 100%);
+    background: linear-gradient(
+      155deg,
+      #fdf5f7 0%,
+      #f5e8eb 28%,
+      #7a1a32 52%,
+      #6b1428 72%,
+      #3d0014 100%
+    );
   }
 }
 
@@ -298,48 +305,48 @@ a {
 }
 
 .night-star--t1 {
-  background: #8b1a3a;
+  background: #5a0f20;
   box-shadow:
-    0 0 2px 1px rgba(139, 26, 58, 0.95),
-    0 0 10px 3px rgba(160, 32, 64, 0.45),
-    0 0 18px 6px rgba(184, 105, 122, 0.28);
+    0 0 2px 1px rgba(90, 15, 32, 0.98),
+    0 0 12px 4px rgba(107, 20, 40, 0.62),
+    0 0 22px 8px rgba(122, 26, 50, 0.38);
 }
 
 .night-star--t2 {
-  background: #a02040;
+  background: #6b1428;
   box-shadow:
-    0 0 2px 1px rgba(160, 32, 64, 0.95),
-    0 0 10px 3px rgba(192, 64, 90, 0.42),
-    0 0 18px 6px rgba(212, 140, 155, 0.26);
+    0 0 2px 1px rgba(107, 20, 40, 0.98),
+    0 0 12px 4px rgba(122, 26, 50, 0.58),
+    0 0 22px 8px rgba(139, 32, 64, 0.36);
 }
 
 .night-star--t3 {
-  background: #c0405a;
+  background: #7a1a32;
   box-shadow:
-    0 0 2px 1px rgba(192, 64, 90, 0.95),
-    0 0 10px 3px rgba(212, 160, 168, 0.48),
-    0 0 18px 6px rgba(248, 210, 218, 0.22);
+    0 0 2px 1px rgba(122, 26, 50, 0.98),
+    0 0 12px 4px rgba(139, 32, 64, 0.55),
+    0 0 22px 8px rgba(160, 40, 72, 0.34);
 }
 
 .night-star--t4 {
-  background: #d4a0a8;
+  background: #8b2040;
   box-shadow:
-    0 0 2px 1px rgba(212, 160, 168, 0.95),
-    0 0 10px 3px rgba(232, 196, 207, 0.55),
-    0 0 18px 6px rgba(255, 248, 250, 0.35);
+    0 0 2px 1px rgba(139, 32, 64, 0.98),
+    0 0 12px 4px rgba(160, 40, 72, 0.52),
+    0 0 22px 8px rgba(176, 52, 84, 0.36);
 }
 
 .night-star--t5 {
-  background: #b8697a;
+  background: #a02848;
   box-shadow:
-    0 0 2px 1px rgba(184, 105, 122, 0.95),
-    0 0 10px 3px rgba(200, 120, 138, 0.45),
-    0 0 18px 6px rgba(248, 228, 235, 0.32);
+    0 0 2px 1px rgba(160, 40, 72, 0.98),
+    0 0 12px 4px rgba(176, 52, 84, 0.5),
+    0 0 22px 8px rgba(192, 68, 96, 0.34);
 }
 
 @keyframes night-twinkle {
   from {
-    opacity: 0.3;
+    opacity: 0.42;
   }
 
   to {
@@ -362,17 +369,11 @@ a {
   border-radius: 2px;
   transform-origin: left center;
   opacity: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(139, 26, 58, 0),
-    rgba(139, 26, 58, 0.98),
-    rgba(192, 64, 90, 0.88),
-    rgba(212, 160, 168, 0)
-  );
+  background: linear-gradient(90deg, transparent, #5a0f20, #8b2040, transparent);
   filter: blur(0.45px);
   box-shadow:
-    0 0 14px 4px rgba(139, 26, 58, 0.42),
-    0 0 26px 10px rgba(248, 196, 207, 0.35);
+    0 0 14px 4px rgba(90, 15, 32, 0.55),
+    0 0 26px 10px rgba(139, 32, 64, 0.38);
 }
 
 .shooting-star:nth-child(1) {
@@ -1765,7 +1766,7 @@ body.is-switching-lang main {
 
   .night-star {
     animation: none !important;
-    opacity: 0.65 !important;
+    opacity: 0.74 !important;
     filter: blur(0.3px) !important;
   }
 
