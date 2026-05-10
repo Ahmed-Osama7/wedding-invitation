@@ -248,7 +248,6 @@ function createParticles() {
     p.style.left = `${left}%`;
     p.style.animationDuration = `${duration}s`;
     p.style.animationDelay = `${delay}s`;
-    p.style.opacity = String(0.12 + Math.random() * 0.35);
     frag.appendChild(p);
   }
 
@@ -264,7 +263,6 @@ function createParticles() {
     p.style.left = `${left}%`;
     p.style.animationDuration = `${duration}s`;
     p.style.animationDelay = `${delay}s`;
-    p.style.opacity = String(0.2 + Math.random() * 0.35);
     frag.appendChild(p);
   }
 
