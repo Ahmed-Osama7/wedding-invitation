@@ -47,9 +47,9 @@
         padding: 3px;
         border-radius: 999px;
         border: 1px solid rgba(139, 26, 58, 0.18);
-        background: rgba(255, 253, 254, 0.94);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
         box-shadow: 0 14px 44px rgba(139, 26, 58, 0.08), 0 4px 20px rgba(90, 15, 32, 0.06);
       }
       nav.nav-bar #lang-switch .lang-switch__thumb {
@@ -85,6 +85,11 @@
     </style>
   </head>
   <body translate="no" class="notranslate">
+    <!-- Luxury backdrop: gradient + satin shimmer + canvas — first in body so fixed layers stack correctly (see style.css, script.js) -->
+    <div class="page-bg-gradient" aria-hidden="true"></div>
+    <div class="page-bg-shimmer" aria-hidden="true"></div>
+    <canvas id="glitter-canvas" class="glitter-canvas" width="300" height="150"></canvas>
+
     <!-- Loading screen -->
     <div id="loading-screen" class="loading-screen" aria-hidden="false">
       <div class="loading-inner">
@@ -93,11 +98,6 @@
         <div class="loading-bar"><span class="loading-bar-fill"></span></div>
       </div>
     </div>
-
-    <!-- Luxury backdrop: gradient + satin shimmer + canvas (see script.js) -->
-    <div class="page-bg-gradient" aria-hidden="true"></div>
-    <div class="page-bg-shimmer" aria-hidden="true"></div>
-    <canvas id="glitter-canvas" class="glitter-canvas" width="300" height="150"></canvas>
 
     <!-- Music toggle -->
     <button
