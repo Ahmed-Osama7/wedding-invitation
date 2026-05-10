@@ -36,10 +36,12 @@ const WEDDING_DATE = new Date(2026, 5, 5, 21, 0, 0);
 /** Canvas API instance set after DOM ready */
 let signaturePad = null;
 
+const STAR_TONES = ['night-star--t1', 'night-star--t2', 'night-star--t3', 'night-star--t4', 'night-star--t5'];
+
 const SELECTORS = {
   loadingScreen: '#loading-screen',
   nightSkyStars: '#night-sky-stars',
-  nightSkyCanvas: '#night-sky-canvas',
+  bridalPetals: '#bridal-petals',
   navToggle: '#nav-toggle',
   navBar: '.nav-bar',
   musicToggle: '#music-toggle',
@@ -225,38 +227,32 @@ function initLoadingScreen() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Night sky: canvas gradient + DOM stars                                     */
+/* Bridal backdrop: floating petals/sparkles + twinkling stars                */
 /* -------------------------------------------------------------------------- */
 
-function paintNightSkyCanvas() {
-  const canvas = $(SELECTORS.nightSkyCanvas);
-  if (!canvas || !canvas.getContext) return;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
+function createBridalPetals() {
+  const host = $(SELECTORS.bridalPetals);
+  if (!host) return;
 
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  const w = window.innerWidth;
-  const h = window.innerHeight;
-  canvas.width = Math.floor(w * dpr);
-  canvas.height = Math.floor(h * dpr);
-  canvas.style.width = `${w}px`;
-  canvas.style.height = `${h}px`;
+  const mobile = window.matchMedia('(max-width: 768px)').matches;
+  const count = mobile ? 12 : 18;
+  const frag = document.createDocumentFragment();
 
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  const grd = ctx.createLinearGradient(0, 0, w, h * 1.05);
-  grd.addColorStop(0, '#0a0a1a');
-  grd.addColorStop(0.5, '#1a0a2e');
-  grd.addColorStop(1, '#0d1b2a');
-  ctx.fillStyle = grd;
-  ctx.fillRect(0, 0, w, h);
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('span');
+    const sparkle = Math.random() > 0.48;
+    el.className = sparkle ? 'bridal-sparkle' : 'bridal-petal';
+    el.setAttribute('aria-hidden', 'true');
+    el.style.left = `${Math.random() * 100}%`;
+    el.style.animationDuration = `${16 + Math.random() * 26}s`;
+    el.style.animationDelay = `${Math.random() * -36}s`;
+    frag.appendChild(el);
+  }
+
+  host.appendChild(frag);
 }
 
-function initNightSkyCanvas() {
-  paintNightSkyCanvas();
-  window.addEventListener('resize', debounce(paintNightSkyCanvas, 120));
-}
-
-/** ~150–190 twinkling stars; opacity & duration randomized per star */
+/** ~150–190 twinkling stars; burgundy/rose tones; opacity & duration vary */
 function createNightStars() {
   const host = $(SELECTORS.nightSkyStars);
   if (!host) return;
@@ -267,7 +263,8 @@ function createNightStars() {
 
   for (let i = 0; i < count; i++) {
     const s = document.createElement('span');
-    s.className = 'night-star';
+    const tone = STAR_TONES[Math.floor(Math.random() * STAR_TONES.length)];
+    s.className = `night-star ${tone}`;
     s.setAttribute('aria-hidden', 'true');
     const px = 1 + Math.floor(Math.random() * 3);
     s.style.width = `${px}px`;
@@ -635,7 +632,7 @@ function boot() {
   initLanguageSwitcher();
 
   initLoadingScreen();
-  initNightSkyCanvas();
+  createBridalPetals();
   createNightStars();
   initSmoothScroll();
   initMobileNav();
