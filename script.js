@@ -269,29 +269,29 @@ function createParticles() {
   host.appendChild(frag);
 }
 
-/** Soft twinkling stars — warm gold/champagne, slow drift + 3–6s twinkle (with existing particles) */
+/** Subtle background dots — 1–2px, slow drift + gentle opacity (styled in CSS) */
 function createStars() {
   const host = $(SELECTORS.particles);
   if (!host) return;
 
   const mobile = window.matchMedia('(max-width: 768px)').matches;
-  const count = mobile ? 24 : 40;
+  const count = mobile ? 28 : 44;
   const frag = document.createDocumentFragment();
-  const glyphs = ['✦', '✧'];
 
   for (let i = 0; i < count; i++) {
     const s = document.createElement('span');
-    s.className = 'star-particle' + (i % 3 === 0 ? ' star-particle--champagne' : '');
+    s.className = 'star-particle' + (i % 4 === 0 ? ' star-particle--champagne' : '');
     s.setAttribute('aria-hidden', 'true');
-    s.textContent = glyphs[i % glyphs.length];
+    const px = 1 + Math.round(Math.random());
+    s.style.width = `${px}px`;
+    s.style.height = `${px}px`;
     s.style.left = `${Math.random() * 100}%`;
     s.style.top = `${Math.random() * 100}%`;
-    s.style.fontSize = `${3 + Math.random() * 5}px`;
-    const twDur = 3 + Math.random() * 3;
-    const driftDur = 85 + Math.random() * 55;
+    const twDur = 10 + Math.random() * 16;
+    const driftDur = 120 + Math.random() * 80;
     s.style.setProperty('--star-twinkle-dur', `${twDur.toFixed(2)}s`);
     s.style.setProperty('--star-drift-dur', `${driftDur.toFixed(0)}s`);
-    s.style.animationDelay = `${(Math.random() * -8).toFixed(2)}s, ${(Math.random() * -6).toFixed(2)}s`;
+    s.style.animationDelay = `${(Math.random() * -12).toFixed(2)}s, ${(Math.random() * -10).toFixed(2)}s`;
     frag.appendChild(s);
   }
 
