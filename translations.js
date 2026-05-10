@@ -37,13 +37,13 @@ export const TRANSLATIONS = {
     hero: {
       kicker: 'بكل حب ووفاء',
       invitationTitle: 'دعوة زفاف',
-      coupleNames: 'ريم & عبدالرحمن',
+      coupleNames: 'عبدالرحمن & ريم',
       subtitle:
         'ندعوكم لاستكمال قصة الحب بلمسة من النور، حيث يلتقي القلبان تحت سماء من الحرير والنجوم.',
       cta: 'اكتشف التفاصيل',
     },
     countdown: {
-      coupleLine: 'ريم & عبدالرحمن',
+      coupleLine: 'عبدالرحمن & ريم',
       eyebrow: 'حتى ليلة العمر',
       title: 'العد التنازلي',
       desc: '٥ يونيو — الساعة ٩ مساءً',
@@ -134,13 +134,13 @@ export const TRANSLATIONS = {
     hero: {
       kicker: 'With love and devotion',
       invitationTitle: 'Wedding Invitation',
-      coupleNames: 'Reem & Abdulrahman',
+      coupleNames: 'Abdulrahman & Reem',
       subtitle:
         'We invite you to continue our love story in a glow of light — two hearts meeting beneath a sky of silk and stars.',
       cta: 'Discover the details',
     },
     countdown: {
-      coupleLine: 'Reem & Abdulrahman',
+      coupleLine: 'Abdulrahman & Reem',
       eyebrow: 'Until our forever night',
       title: 'Countdown',
       desc: 'June 5 · 9:00 PM',
