@@ -171,31 +171,6 @@
     </div>
 
     <div id="site-content" class="site-content">
-    <!-- Music toggle -->
-    <button
-      type="button"
-      class="music-toggle"
-      id="music-toggle"
-      aria-pressed="false"
-      data-i18n-attr="aria-label:music.ariaLabel|title:music.title"
-      aria-label="Play or pause background music"
-      title="Music"
-    >
-      <span class="music-icon music-off" aria-hidden="true">♪</span>
-      <span class="music-icon music-on" aria-hidden="true">♫</span>
-    </button>
-
-    <audio id="bg-audio" loop preload="metadata">
-      <source id="bg-audio-source" src="music/wedding-music.mp3" type="audio/mpeg" />
-    </audio>
-    <script>
-      (function () {
-        var src = document.getElementById('bg-audio-source');
-        var v = window.__SITE_ASSET_VERSION__ || '1';
-        if (src) src.src = 'music/wedding-music.mp3?v=' + encodeURIComponent(v);
-      })();
-    </script>
-
     <header class="site-header">
       <nav class="nav-bar glass" aria-label="Main">
         <a href="#hero" class="nav-brand" data-i18n="nav.brand">Wedding</a>
@@ -491,6 +466,31 @@
       </footer>
     </main>
     </div>
+
+    <!-- Fixed controls live outside #site-content so transform on that wrapper does not break position:fixed -->
+    <button
+      type="button"
+      class="music-toggle"
+      id="music-toggle"
+      aria-pressed="false"
+      data-i18n-attr="aria-label:music.ariaLabel|title:music.title"
+      aria-label="Play or pause background music"
+      title="Music"
+    >
+      <span class="music-icon music-off" aria-hidden="true">♪</span>
+      <span class="music-icon music-on" aria-hidden="true">♫</span>
+    </button>
+
+    <audio id="bg-audio" loop preload="metadata">
+      <source id="bg-audio-source" src="music/wedding-music.mp3" type="audio/mpeg" />
+    </audio>
+    <script>
+      (function () {
+        var src = document.getElementById('bg-audio-source');
+        var v = window.__SITE_ASSET_VERSION__ || '1';
+        if (src) src.src = 'music/wedding-music.mp3?v=' + encodeURIComponent(v);
+      })();
+    </script>
 
     <script>
       (function () {

@@ -622,12 +622,12 @@ html:not(.envelope-skipped) .site-content.site-content--revealed {
   pointer-events: none;
 }
 
-/* Music */
+/* Music — root-level sibling of #site-content so fixed positioning uses the viewport (parent transform breaks fixed) */
 .music-toggle {
   position: fixed;
-  bottom: 1.25rem;
-  inset-inline-start: 1.25rem;
-  z-index: 50;
+  bottom: 24px;
+  inset-inline-start: 24px;
+  z-index: 9998;
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -640,7 +640,36 @@ html:not(.envelope-skipped) .site-content.site-content--revealed {
   display: grid;
   place-items: center;
   box-shadow: var(--shadow-card);
-  transition: transform var(--dur-ui) var(--ease-out), border-color var(--dur-ui), box-shadow var(--dur-ui);
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity 0.5s ease,
+    transform var(--dur-ui) var(--ease-out),
+    border-color var(--dur-ui),
+    box-shadow var(--dur-ui);
+}
+
+html.envelope-skipped .music-toggle {
+  opacity: 1;
+  pointer-events: auto;
+  transition:
+    opacity 0.5s ease 0.5s,
+    transform var(--dur-ui) var(--ease-out),
+    border-color var(--dur-ui),
+    box-shadow var(--dur-ui);
+}
+
+@media (max-width: 480px) {
+  .music-toggle {
+    bottom: 16px;
+    inset-inline-start: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.envelope-skipped .music-toggle {
+    transition: opacity 0.01ms ease 0s;
+  }
 }
 
 .music-toggle:hover {
