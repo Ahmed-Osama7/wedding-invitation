@@ -38,9 +38,8 @@ let signaturePad = null;
 
 const SELECTORS = {
   loadingScreen: '#loading-screen',
-  particles: '#particles',
-  starFieldDistant: '#star-field-distant',
-  starFieldSparkle: '#star-field-sparkle',
+  nightSkyStars: '#night-sky-stars',
+  nightSkyCanvas: '#night-sky-canvas',
   navToggle: '#nav-toggle',
   navBar: '.nav-bar',
   musicToggle: '#music-toggle',
@@ -226,108 +225,60 @@ function initLoadingScreen() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Floating particles                                                         */
+/* Night sky: canvas gradient + DOM stars                                     */
 /* -------------------------------------------------------------------------- */
 
-function createParticles() {
-  const host = $(SELECTORS.particles);
+function paintNightSkyCanvas() {
+  const canvas = $(SELECTORS.nightSkyCanvas);
+  if (!canvas || !canvas.getContext) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  canvas.width = Math.floor(w * dpr);
+  canvas.height = Math.floor(h * dpr);
+  canvas.style.width = `${w}px`;
+  canvas.style.height = `${h}px`;
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const grd = ctx.createLinearGradient(0, 0, w, h * 1.05);
+  grd.addColorStop(0, '#0a0a1a');
+  grd.addColorStop(0.5, '#1a0a2e');
+  grd.addColorStop(1, '#0d1b2a');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, w, h);
+}
+
+function initNightSkyCanvas() {
+  paintNightSkyCanvas();
+  window.addEventListener('resize', debounce(paintNightSkyCanvas, 120));
+}
+
+/** ~150–190 twinkling stars; opacity & duration randomized per star */
+function createNightStars() {
+  const host = $(SELECTORS.nightSkyStars);
   if (!host) return;
 
   const mobile = window.matchMedia('(max-width: 768px)').matches;
-  const mistCount = mobile ? 14 : 22;
-  const sparkleCount = mobile ? 10 : 16;
-  const frag = document.createDocumentFragment();
-
-  for (let i = 0; i < mistCount; i++) {
-    const p = document.createElement('span');
-    p.className = 'particle';
-    const size = 3 + Math.random() * 3.8;
-    const left = Math.random() * 100;
-    const duration = 18 + Math.random() * 26;
-    const delay = Math.random() * -30;
-    p.style.width = `${size}px`;
-    p.style.height = `${size}px`;
-    p.style.left = `${left}%`;
-    p.style.animationDuration = `${duration}s`;
-    p.style.animationDelay = `${delay}s`;
-    frag.appendChild(p);
-  }
-
-  for (let i = 0; i < sparkleCount; i++) {
-    const p = document.createElement('span');
-    p.className = 'particle particle--sparkle';
-    const size = 2 + Math.random() * 3.2;
-    const left = Math.random() * 100;
-    const duration = 32 + Math.random() * 36;
-    const delay = Math.random() * -40;
-    p.style.width = `${size}px`;
-    p.style.height = `${size}px`;
-    p.style.left = `${left}%`;
-    p.style.animationDuration = `${duration}s`;
-    p.style.animationDelay = `${delay}s`;
-    frag.appendChild(p);
-  }
-
-  host.appendChild(frag);
-}
-
-function appendTwinkleStar(host, mode) {
-  const distant = mode === 'distant';
-  const wrap = document.createElement('span');
-  wrap.className = 'star-node';
-  wrap.setAttribute('aria-hidden', 'true');
-  const core = document.createElement('span');
-  core.className = 'star-node__core';
-  wrap.appendChild(core);
-
-  const px = 1 + Math.floor(Math.random() * 3);
-  core.style.width = `${px}px`;
-  core.style.height = `${px}px`;
-  core.style.setProperty('--star-blur', px <= 1 ? '0.55px' : px === 2 ? '0.7px' : '0.95px');
-
-  wrap.style.left = `${Math.random() * 100}%`;
-  wrap.style.top = `${Math.random() * 100}%`;
-
-  const twDur = distant ? 3.2 + Math.random() * 6.8 : 1.8 + Math.random() * 4.2;
-  const floatDur = distant ? 100 + Math.random() * 100 : 65 + Math.random() * 75;
-
-  wrap.style.setProperty('--star-twinkle-dur', `${twDur.toFixed(2)}s`);
-  wrap.style.setProperty('--star-float-dur', `${floatDur.toFixed(0)}s`);
-
-  const fd = parseFloat(floatDur);
-  wrap.style.animationDelay = `${(Math.random() * -fd).toFixed(2)}s`;
-  core.style.animationDelay = `${(Math.random() * -30).toFixed(2)}s`;
-
-  host.appendChild(wrap);
-}
-
-/** Layer 1: dense distant stars — slow float + twinkle + scale */
-function createStarFieldDistant() {
-  const host = $(SELECTORS.starFieldDistant);
-  if (!host) return;
-
-  const mobile = window.matchMedia('(max-width: 768px)').matches;
-  const count = mobile ? 38 : 58;
+  const count = mobile ? 150 : 190;
   const frag = document.createDocumentFragment();
 
   for (let i = 0; i < count; i++) {
-    appendTwinkleStar(frag, 'distant');
-  }
-
-  host.appendChild(frag);
-}
-
-/** Layer 2: fewer brighter blinking stars */
-function createStarFieldSparkle() {
-  const host = $(SELECTORS.starFieldSparkle);
-  if (!host) return;
-
-  const mobile = window.matchMedia('(max-width: 768px)').matches;
-  const count = mobile ? 10 : 16;
-  const frag = document.createDocumentFragment();
-
-  for (let i = 0; i < count; i++) {
-    appendTwinkleStar(frag, 'sparkle');
+    const s = document.createElement('span');
+    s.className = 'night-star';
+    s.setAttribute('aria-hidden', 'true');
+    const px = 1 + Math.floor(Math.random() * 3);
+    s.style.width = `${px}px`;
+    s.style.height = `${px}px`;
+    s.style.left = `${Math.random() * 100}%`;
+    s.style.top = `${Math.random() * 100}%`;
+    const dur = 2 + Math.random() * 3;
+    const delay = Math.random() * 5;
+    s.style.animationDuration = `${dur.toFixed(2)}s`;
+    s.style.animationDelay = `${delay.toFixed(2)}s`;
+    frag.appendChild(s);
   }
 
   host.appendChild(frag);
@@ -684,9 +635,8 @@ function boot() {
   initLanguageSwitcher();
 
   initLoadingScreen();
-  createParticles();
-  createStarFieldDistant();
-  createStarFieldSparkle();
+  initNightSkyCanvas();
+  createNightStars();
   initSmoothScroll();
   initMobileNav();
   initMusicToggle();

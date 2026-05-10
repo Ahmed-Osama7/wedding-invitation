@@ -46,21 +46,20 @@
         align-items: stretch;
         padding: 3px;
         border-radius: 999px;
-        border: 1px solid #e7e2d8;
-        background: rgba(241, 237, 230, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(22, 22, 46, 0.85);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        box-shadow: 0 14px 44px rgba(198, 161, 91, 0.07), 0 4px 20px rgba(198, 161, 91, 0.05),
-          0 0 80px rgba(198, 161, 91, 0.08);
+        box-shadow: 0 14px 44px rgba(0, 0, 0, 0.35), 0 4px 20px rgba(0, 0, 0, 0.25);
       }
       nav.nav-bar #lang-switch .lang-switch__thumb {
         border-radius: 999px;
-        border: 1px solid rgba(198, 161, 91, 0.45);
+        border: 1px solid rgba(212, 175, 122, 0.35);
         background: linear-gradient(
           165deg,
-          rgba(216, 188, 122, 0.65) 0%,
-          rgba(241, 237, 230, 0.82) 45%,
-          rgba(198, 161, 91, 0.14) 100%
+          rgba(40, 40, 72, 0.95) 0%,
+          rgba(28, 28, 52, 0.92) 50%,
+          rgba(36, 36, 68, 0.98) 100%
         );
       }
       nav.nav-bar #lang-switch button.lang-switch__btn {
@@ -72,7 +71,7 @@
         background: transparent !important;
         background-image: none !important;
         box-shadow: none !important;
-        color: #6e6a63 !important;
+        color: rgba(235, 235, 245, 0.72) !important;
         font-family: Outfit, system-ui, sans-serif !important;
         font-size: 0.62rem !important;
         font-weight: 700 !important;
@@ -80,8 +79,8 @@
         cursor: pointer !important;
       }
       nav.nav-bar #lang-switch button.lang-switch__btn[aria-pressed='true'] {
-        color: #c6a15b !important;
-        text-shadow: 0 0 18px rgba(216, 188, 122, 0.45), 0 0 8px rgba(198, 161, 91, 0.22);
+        color: #d4af7a !important;
+        text-shadow: 0 0 18px rgba(212, 175, 122, 0.35), 0 0 8px rgba(212, 175, 122, 0.2);
       }
     </style>
   </head>
@@ -95,11 +94,18 @@
       </div>
     </div>
 
-    <!-- Cinematic background: distant stars → sparkle stars → waves (CSS) → shimmer -->
-    <div class="star-field star-field--distant" id="star-field-distant" aria-hidden="true"></div>
-    <div class="star-field star-field--sparkle" id="star-field-sparkle" aria-hidden="true"></div>
-    <div class="particles" id="particles" aria-hidden="true"></div>
-    <div class="bg-shimmer" id="bg-shimmer" aria-hidden="true"></div>
+    <!-- Fixed night sky (does not scroll); stars injected via JS -->
+    <div id="night-sky" class="night-sky" aria-hidden="true">
+      <canvas id="night-sky-canvas" class="night-sky__canvas" aria-hidden="true"></canvas>
+      <div class="night-sky__stars" id="night-sky-stars"></div>
+      <div class="shooting-stars" aria-hidden="true">
+        <span class="shooting-star"></span>
+        <span class="shooting-star"></span>
+        <span class="shooting-star"></span>
+        <span class="shooting-star"></span>
+        <span class="shooting-star"></span>
+      </div>
+    </div>
 
     <!-- Music toggle -->
     <button
