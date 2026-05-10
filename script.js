@@ -224,14 +224,38 @@ function initLoadingScreen() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Canvas glitter — organic sine motion, full document height               */
+/* Canvas glitter — upward drift, pearls, bling crosses, full document height   */
 /* -------------------------------------------------------------------------- */
 
-const GLITTER_COLORS = ['#8b1a3a', '#a02848', '#c0405a', '#6b1428'];
+const GLITTER_HEX = ['#8b1a3a', '#a02848', '#c0405a', '#6b1428'];
+const WHITE_SPARKLE = 'rgba(255,255,255,0.9)';
+const SOFT_PINK_SPARKLE = 'rgba(255,240,245,0.8)';
 
 function hexToRgb(hex) {
   const n = parseInt(hex.slice(1), 16);
-  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255, a: 1 };
+}
+
+function parseColor(str) {
+  if (str.startsWith('rgba')) {
+    const m = str.match(/rgba\s*\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*\)/);
+    if (m) {
+      return { r: +m[1], g: +m[2], b: +m[3], a: +m[4] };
+    }
+  }
+  return hexToRgb(str);
+}
+
+function rgbaFromParsed(c, opacity) {
+  const a = (c.a ?? 1) * opacity;
+  return `rgba(${c.r},${c.g},${c.b},${a})`;
+}
+
+function pickGlitterColorStr() {
+  const r = Math.random();
+  if (r < 0.2) return WHITE_SPARKLE;
+  if (r < 0.35) return SOFT_PINK_SPARKLE;
+  return GLITTER_HEX[(Math.random() * GLITTER_HEX.length) | 0];
 }
 
 function docScrollHeight() {
@@ -249,12 +273,15 @@ function initGlitterCanvas() {
     window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const mobile = window.matchMedia('(max-width: 768px)').matches;
-  const count = mobile ? 64 : 78;
+  const glitterCount = mobile ? 152 : 188;
+  const blingCount = 17;
+  const pearlCount = 22;
 
   let particles = [];
   let lastDocH = 0;
   let lastInnerW = 0;
   let framesSinceCheck = 0;
+  let lastMs = performance.now();
 
   function buildParticles() {
     const h = docScrollHeight();
@@ -263,33 +290,62 @@ function initGlitterCanvas() {
     lastInnerW = w;
     particles = [];
 
-    for (let i = 0; i < count; i++) {
-      const opacityLo = 0.3 + Math.random() * 0.22;
-      let opacityHi = opacityLo + 0.12 + Math.random() * 0.48;
-      opacityHi = Math.min(0.9, opacityHi);
-
+    for (let i = 0; i < glitterCount; i++) {
+      const colorStr = pickGlitterColorStr();
+      const r = 0.5 + Math.random() * 1.5;
       particles.push({
-        baseX: Math.random() * w,
-        baseY: Math.random() * h,
-        fx: 0.055 + Math.random() * 0.1,
-        fy: 0.048 + Math.random() * 0.088,
-        fz: 0.038 + Math.random() * 0.072,
-        fw: 0.05 + Math.random() * 0.078,
-        px: Math.random() * Math.PI * 2,
-        py: Math.random() * Math.PI * 2,
-        pz: Math.random() * Math.PI * 2,
-        pw: Math.random() * Math.PI * 2,
-        ax: 12 + Math.random() * 32,
-        ay: 16 + Math.random() * 38,
-        az: 7 + Math.random() * 24,
-        aw: 8 + Math.random() * 22,
-        r: 0.75 + Math.random() * 1.0,
-        color: GLITTER_COLORS[(Math.random() * GLITTER_COLORS.length) | 0],
-        opFreq: 0.045 + Math.random() * 0.085,
+        kind: 'glitter',
+        anchorX: Math.random() * w,
+        docY: Math.random() * h,
+        vy: 0.3 + Math.random() * 0.5,
+        hFreq: 0.38 + Math.random() * 0.42,
+        hFreq2: 0.22 + Math.random() * 0.28,
+        hPhase: Math.random() * Math.PI * 2,
+        hPhase2: Math.random() * Math.PI * 2,
+        hAmp: 10 + Math.random() * 16,
+        r,
+        colorStr,
+        parsed: parseColor(colorStr),
+        shadowBlur: 6 + Math.random() * 9,
+        twFreq: 0.09 + Math.random() * 0.14,
+        twPhase: Math.random() * Math.PI * 2,
+      });
+    }
+
+    for (let i = 0; i < blingCount; i++) {
+      const arm = 2 + Math.random() * 2.5;
+      particles.push({
+        kind: 'bling',
+        anchorX: Math.random() * w,
+        docY: Math.random() * h,
+        vy: 0.32 + Math.random() * 0.48,
+        hFreq: 0.4 + Math.random() * 0.35,
+        hFreq2: 0.25 + Math.random() * 0.2,
+        hPhase: Math.random() * Math.PI * 2,
+        hPhase2: Math.random() * Math.PI * 2,
+        hAmp: 12 + Math.random() * 14,
+        arm,
+        shadowBlur: 15 + Math.random() * 10,
+        twFreq: 0.28 + Math.random() * 0.35,
+        twPhase: Math.random() * Math.PI * 2,
+      });
+    }
+
+    for (let i = 0; i < pearlCount; i++) {
+      particles.push({
+        kind: 'pearl',
+        anchorX: Math.random() * w,
+        docY: Math.random() * h,
+        vy: 0.2 + Math.random() * 0.2,
+        hFreq: 0.25 + Math.random() * 0.25,
+        hFreq2: 0.18 + Math.random() * 0.15,
+        hPhase: Math.random() * Math.PI * 2,
+        hPhase2: Math.random() * Math.PI * 2,
+        hAmp: 8 + Math.random() * 12,
+        r: 2 + Math.random() * 2.5,
+        pearlBlur: 8 + Math.random() * 4,
+        opFreq: 0.055 + Math.random() * 0.06,
         opPhase: Math.random() * Math.PI * 2,
-        opacityLo,
-        opacityHi,
-        blur: 4 + Math.random() * 4,
       });
     }
   }
@@ -305,66 +361,138 @@ function initGlitterCanvas() {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     const nh = docScrollHeight();
-    if (particles.length === 0 || Math.abs(nh - lastDocH) > 40 || vw !== lastInnerW) {
+    if (particles.length === 0 || Math.abs(nh - lastDocH) > 48 || vw !== lastInnerW) {
       buildParticles();
     }
     lastInnerW = vw;
   }
 
-  function drawFrame(tSec) {
+  function wrapUpward(p, vw, docH) {
+    if (p.docY < -35) {
+      p.docY = docH + 40 + Math.random() * 100;
+      p.anchorX = Math.random() * vw;
+    }
+  }
+
+  function docXFor(p, tSec) {
+    return (
+      p.anchorX +
+      Math.sin(tSec * p.hFreq + p.hPhase) * p.hAmp +
+      Math.sin(tSec * p.hFreq2 + p.hPhase2) * 0.4
+    );
+  }
+
+  function drawGlitter(p, sx, sy, opacity, tSec) {
+    const c = p.parsed;
+    ctx.save();
+    ctx.shadowBlur = p.shadowBlur;
+    ctx.shadowColor = rgbaFromParsed(c, opacity * 0.92);
+    ctx.fillStyle = rgbaFromParsed(c, opacity);
+    ctx.beginPath();
+    ctx.arc(sx, sy, p.r, 0, Math.PI * 2);
+    ctx.fill();
+
+    const isBurgundy =
+      p.colorStr.startsWith('#') ||
+      (p.colorStr.startsWith('rgba') && p.parsed.r < 250 && p.r >= 1.5);
+    if (isBurgundy && p.r >= 1.5) {
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = 'rgba(255,255,255,0.8)';
+      ctx.beginPath();
+      ctx.arc(sx, sy, p.r * 0.38, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawBling(p, sx, sy, opacity, tSec) {
+    const arm = p.arm;
+    ctx.save();
+    ctx.translate(sx, sy);
+    ctx.rotate(Math.sin(tSec * 0.15 + p.hPhase) * 0.08);
+    ctx.globalAlpha = opacity;
+    ctx.fillStyle = '#ffffff';
+    ctx.shadowBlur = p.shadowBlur;
+    ctx.shadowColor = '#ffffff';
+    ctx.fillRect(-1, -arm, 2, arm * 2);
+    ctx.fillRect(-arm, -1, arm * 2, 2);
+    ctx.restore();
+  }
+
+  function drawPearl(p, sx, sy, opacity) {
+    ctx.save();
+    ctx.shadowBlur = p.pearlBlur;
+    ctx.shadowColor = 'rgba(255,220,230,0.55)';
+    const g = ctx.createRadialGradient(sx - p.r * 0.35, sy - p.r * 0.35, 0, sx, sy, p.r);
+    g.addColorStop(0, `rgba(255,255,255,${opacity})`);
+    g.addColorStop(0.55, `rgba(252,235,238,${opacity * 0.88})`);
+    g.addColorStop(1, `rgba(220,180,190,${opacity * 0.42})`);
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(sx, sy, p.r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawFrame(tSec, frameScale) {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     const sy = window.scrollY;
+    const docH = docScrollHeight();
 
     ctx.clearRect(0, 0, vw, vh);
 
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
-      const docX =
-        p.baseX + Math.sin(tSec * p.fx + p.px) * p.ax + Math.sin(tSec * p.fz + p.pz) * p.az;
-      const docY =
-        p.baseY + Math.sin(tSec * p.fy + p.py) * p.ay + Math.sin(tSec * p.fw + p.pw) * p.aw;
-
-      const sx = docX;
-      const screenY = docY - sy;
-
-      if (screenY < -50 || screenY > vh + 50) continue;
-
-      const opacity =
-        p.opacityLo + (p.opacityHi - p.opacityLo) * (0.5 + 0.5 * Math.sin(tSec * p.opFreq + p.opPhase));
-
-      const rgb = hexToRgb(p.color);
-      ctx.save();
-      ctx.shadowBlur = p.blur;
-      ctx.shadowColor = `rgba(${rgb.r},${rgb.g},${rgb.b},${opacity * 0.88})`;
-      ctx.fillStyle = `rgba(${rgb.r},${rgb.g},${rgb.b},${opacity})`;
-      ctx.beginPath();
-      ctx.arc(sx, screenY, p.r, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
+      p.docY -= p.vy * frameScale;
+      wrapUpward(p, vw, docH);
     }
+
+    function paint(kind, drawer) {
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        if (p.kind !== kind) continue;
+        const docX = docXFor(p, tSec);
+        const screenY = p.docY - sy;
+        if (screenY < -85 || screenY > vh + 85) continue;
+        drawer(p, docX, screenY, tSec);
+      }
+    }
+
+    paint('pearl', (p, docX, screenY, ts) => {
+      const op = 0.5 + 0.4 * (0.5 + 0.5 * Math.sin(ts * p.opFreq + p.opPhase));
+      drawPearl(p, docX, screenY, op);
+    });
+
+    paint('glitter', (p, docX, screenY, ts) => {
+      const tw = 0.2 + 0.8 * (0.5 + 0.5 * Math.sin(ts * p.twFreq + p.twPhase));
+      drawGlitter(p, docX, screenY, tw, ts);
+    });
+
+    paint('bling', (p, docX, screenY, ts) => {
+      const tw = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(ts * p.twFreq + p.twPhase));
+      drawBling(p, docX, screenY, tw, ts);
+    });
   }
 
   function drawStatic() {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     const sy = window.scrollY;
+    const tSec = 0;
     ctx.clearRect(0, 0, vw, vh);
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
-      const sx = p.baseX;
-      const screenY = p.baseY - sy;
-      if (screenY < -50 || screenY > vh + 50) continue;
-      const opacity = 0.42;
-      const rgb = hexToRgb(p.color);
-      ctx.save();
-      ctx.shadowBlur = p.blur * 0.65;
-      ctx.shadowColor = `rgba(${rgb.r},${rgb.g},${rgb.b},${opacity * 0.75})`;
-      ctx.fillStyle = `rgba(${rgb.r},${rgb.g},${rgb.b},${opacity})`;
-      ctx.beginPath();
-      ctx.arc(sx, screenY, p.r, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
+      const docX = docXFor(p, tSec);
+      const screenY = p.docY - sy;
+      if (screenY < -80 || screenY > vh + 80) continue;
+      if (p.kind === 'glitter') {
+        drawGlitter(p, docX, screenY, 0.45, tSec);
+      } else if (p.kind === 'pearl') {
+        drawPearl(p, docX, screenY, 0.68);
+      } else {
+        drawBling(p, docX, screenY, 0.55, tSec);
+      }
     }
   }
 
@@ -385,19 +513,25 @@ function initGlitterCanvas() {
   }
 
   function loop(tMs) {
+    const dt = Math.min(tMs - lastMs, 48);
+    lastMs = tMs;
+    const frameScale = dt / 16.67;
     const tSec = tMs / 1000;
+
     framesSinceCheck += 1;
     if (framesSinceCheck >= 72) {
       framesSinceCheck = 0;
       const nh = docScrollHeight();
-      if (Math.abs(nh - lastDocH) > 48) {
+      if (Math.abs(nh - lastDocH) > 52) {
         buildParticles();
       }
     }
-    drawFrame(tSec);
+
+    drawFrame(tSec, frameScale);
     requestAnimationFrame(loop);
   }
 
+  lastMs = performance.now();
   requestAnimationFrame(loop);
 
   window.addEventListener(
