@@ -4,8 +4,8 @@
 
 :root {
   color-scheme: light;
-  --bg-deep: #fdf5f7;
-  --bg-mid: #f8e8ed;
+  --bg-deep: #ffffff;
+  --bg-mid: #ffffff;
   --border-default: rgba(139, 26, 58, 0.18);
   --lux-glow: rgba(139, 26, 58, 0.06);
   --rose: #a02040;
@@ -17,12 +17,12 @@
   --gold-highlight: #d4a0a8;
   --gold-soft: rgba(139, 26, 58, 0.22);
   --wine: #800020;
-  --heading: #5a0f20;
+  --heading: #3d0014;
   --surface-soft: rgba(255, 255, 255, 0.85);
-  --text-secondary: rgba(90, 15, 32, 0.72);
-  --ivory: #5a0f20;
-  --ivory-muted: rgba(90, 15, 32, 0.9);
-  --ink: #5a0f20;
+  --text-secondary: rgba(61, 0, 20, 0.68);
+  --ivory: #3d0014;
+  --ivory-muted: rgba(61, 0, 20, 0.9);
+  --ink: #3d0014;
   --glass: rgba(255, 253, 254, 0.94);
   --glass-border: rgba(232, 196, 207, 0.95);
   --shadow-soft: 0 24px 56px rgba(90, 15, 32, 0.08), 0 8px 24px rgba(139, 26, 58, 0.06);
@@ -48,19 +48,7 @@ html {
   min-height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-  background-color: var(--bg-deep);
-}
-
-/* Paper grain above fixed bridal backdrop */
-html::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
-  opacity: 0.045;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
-  mix-blend-mode: multiply;
+  background-color: #ffffff;
 }
 
 body {
@@ -70,7 +58,7 @@ body {
   font-family: var(--font-body);
   font-weight: 400;
   color: var(--ivory-muted);
-  background-color: transparent;
+  background-color: #ffffff;
   overflow-x: hidden;
   overflow-y: auto;
   isolation: isolate;
@@ -98,8 +86,7 @@ a {
   z-index: 9999;
   display: grid;
   place-items: center;
-  background-color: #fff9fb;
-  background-image: radial-gradient(circle at 50% 38%, rgba(248, 232, 237, 0.85) 0%, transparent 58%);
+  background-color: #ffffff;
   transition: opacity 0.85s var(--ease-out), visibility 0.85s;
 }
 
@@ -167,273 +154,49 @@ a {
   }
 }
 
-/* Fixed bridal backdrop (animated wash + stars + shooting stars); behind all content */
-.night-sky {
-  pointer-events: none;
+/* Minimal backdrop: whisper wave at bottom + canvas glitter (drawn in JS) */
+.page-bg {
   position: fixed;
   inset: 0;
-  z-index: -1;
-  overflow: hidden;
-}
-
-.night-sky__wash {
-  position: absolute;
-  inset: 0;
   z-index: 0;
-  background: linear-gradient(135deg, #ffffff 0%, #f5e8eb 30%, #8b2040 60%, #5a0f20 80%, #3d0014 100%);
-  animation: bridal-wash-shift 32s ease-in-out infinite alternate;
+  pointer-events: none;
 }
 
-@keyframes bridal-wash-shift {
+.page-bg__wave {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: min(36vh, 360px);
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 130% 95% at 50% 108%, rgba(139, 26, 58, 0.17) 0%, transparent 58%);
+  filter: blur(8px);
+  -webkit-mask-image: linear-gradient(to top, #000 22%, transparent 92%);
+  mask-image: linear-gradient(to top, #000 22%, transparent 92%);
+  animation: page-bg-wave-float 12s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+
+@keyframes page-bg-wave-float {
   0%,
   100% {
-    background: linear-gradient(135deg, #ffffff 0%, #f5e8eb 30%, #8b2040 60%, #5a0f20 80%, #3d0014 100%);
+    transform: translateX(0);
   }
 
   50% {
-    background: linear-gradient(
-      155deg,
-      #fdf5f7 0%,
-      #f5e8eb 28%,
-      #7a1a32 52%,
-      #6b1428 72%,
-      #3d0014 100%
-    );
+    transform: translateX(-30px);
   }
 }
 
-.night-sky__center-glow {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
+.glitter-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
   pointer-events: none;
-  background: radial-gradient(
-    ellipse 78% 56% at 50% 40%,
-    rgba(255, 255, 255, 0.72) 0%,
-    rgba(253, 245, 247, 0.38) 42%,
-    transparent 68%
-  );
-  opacity: 0.95;
-}
-
-.bridal-petals {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.bridal-petal {
-  position: absolute;
-  bottom: -8%;
-  width: 9px;
-  height: 11px;
-  border-radius: 58% 42% 62% 38%;
-  background: linear-gradient(148deg, rgba(192, 64, 90, 0.55), rgba(139, 26, 58, 0.38));
-  opacity: 0;
-  filter: blur(0.35px);
-  animation-name: bridal-petal-float;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-
-.bridal-sparkle {
-  position: absolute;
-  bottom: -6%;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, rgba(255, 252, 253, 0.95) 0%, rgba(212, 160, 168, 0.75) 55%, rgba(139, 26, 58, 0.35) 100%);
-  box-shadow:
-    0 0 10px 2px rgba(192, 64, 90, 0.35),
-    0 0 18px 6px rgba(248, 200, 210, 0.25);
-  opacity: 0;
-  animation-name: bridal-sparkle-rise;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-
-@keyframes bridal-petal-float {
-  0% {
-    transform: translateY(0) translateX(0) rotate(0deg);
-    opacity: 0;
-  }
-
-  10% {
-    opacity: 0.55;
-  }
-
-  100% {
-    transform: translateY(-118vh) translateX(22vw) rotate(260deg);
-    opacity: 0;
-  }
-}
-
-@keyframes bridal-sparkle-rise {
-  0% {
-    transform: translateY(0) translateX(0) scale(0.85);
-    opacity: 0;
-  }
-
-  12% {
-    opacity: 0.85;
-  }
-
-  100% {
-    transform: translateY(-112vh) translateX(-18px) scale(1.05);
-    opacity: 0;
-  }
-}
-
-.night-sky__stars {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-}
-
-.night-star {
-  position: absolute;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  filter: blur(0.35px);
-  animation-name: night-twinkle;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  will-change: opacity;
-}
-
-.night-star--t1 {
-  background: #5a0f20;
-  box-shadow:
-    0 0 2px 1px rgba(90, 15, 32, 0.98),
-    0 0 12px 4px rgba(107, 20, 40, 0.62),
-    0 0 22px 8px rgba(122, 26, 50, 0.38);
-}
-
-.night-star--t2 {
-  background: #6b1428;
-  box-shadow:
-    0 0 2px 1px rgba(107, 20, 40, 0.98),
-    0 0 12px 4px rgba(122, 26, 50, 0.58),
-    0 0 22px 8px rgba(139, 32, 64, 0.36);
-}
-
-.night-star--t3 {
-  background: #8b2040;
-  box-shadow:
-    0 0 2px 1px rgba(139, 32, 64, 0.98),
-    0 0 12px 4px rgba(160, 40, 72, 0.52),
-    0 0 22px 8px rgba(176, 52, 84, 0.36);
-}
-
-.night-star--t4 {
-  background: #a02848;
-  box-shadow:
-    0 0 2px 1px rgba(160, 40, 72, 0.98),
-    0 0 12px 4px rgba(176, 52, 84, 0.52),
-    0 0 22px 8px rgba(192, 68, 96, 0.36);
-}
-
-.night-star--t5 {
-  background: #5a0f20;
-  box-shadow:
-    0 0 2px 1px rgba(90, 15, 32, 0.98),
-    0 0 13px 5px rgba(107, 20, 40, 0.65),
-    0 0 26px 10px rgba(122, 26, 50, 0.42);
-}
-
-@keyframes night-twinkle {
-  from {
-    opacity: 0.42;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-.shooting-stars {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.shooting-star {
-  position: absolute;
-  width: min(160px, 42vw);
-  height: 2px;
-  border-radius: 2px;
-  transform-origin: left center;
-  opacity: 0;
-  background: linear-gradient(90deg, transparent, #5a0f20, #8b2040, transparent);
-  filter: blur(0.45px);
-  box-shadow:
-    0 0 14px 4px rgba(90, 15, 32, 0.55),
-    0 0 26px 10px rgba(139, 32, 64, 0.38);
-}
-
-.shooting-star:nth-child(1) {
-  top: 8%;
-  right: -8%;
-  animation: shooting-streak 29s linear infinite;
-  animation-delay: 0s;
-}
-
-.shooting-star:nth-child(2) {
-  top: 18%;
-  right: 2%;
-  animation: shooting-streak 31s linear infinite;
-  animation-delay: 6.5s;
-}
-
-.shooting-star:nth-child(3) {
-  top: 4%;
-  right: 18%;
-  animation: shooting-streak 27s linear infinite;
-  animation-delay: 13s;
-}
-
-.shooting-star:nth-child(4) {
-  top: 22%;
-  right: -4%;
-  animation: shooting-streak 33s linear infinite;
-  animation-delay: 19.5s;
-}
-
-.shooting-star:nth-child(5) {
-  top: 12%;
-  right: 12%;
-  animation: shooting-streak 30s linear infinite;
-  animation-delay: 25s;
-}
-
-@keyframes shooting-streak {
-  0%,
-  90%,
-  100% {
-    opacity: 0;
-    transform: translate3d(0, 0, 0) rotate(-41deg);
-  }
-
-  91% {
-    opacity: 1;
-    transform: translate3d(-12vw, 8vh, 0) rotate(-41deg);
-  }
-
-  96% {
-    opacity: 0.85;
-    transform: translate3d(-115vmin, 108vmin, 0) rotate(-41deg);
-  }
-
-  97%,
-  100% {
-    opacity: 0;
-    transform: translate3d(-120vmin, 112vmin, 0) rotate(-41deg);
-  }
 }
 
 /* Music */
@@ -813,15 +576,10 @@ section[id] {
 .glass-card {
   border-radius: 1.25rem;
   border: 1px solid var(--border-default);
-  background: linear-gradient(
-    148deg,
-    rgba(255, 255, 255, 0.98) 0%,
-    rgba(253, 245, 247, 0.96) 48%,
-    rgba(248, 236, 240, 0.94) 100%
-  );
+  background: linear-gradient(148deg, rgba(255, 255, 255, 0.99) 0%, rgba(255, 255, 255, 0.97) 50%, rgba(255, 255, 255, 0.99) 100%);
   backdrop-filter: blur(var(--blur-glass));
   -webkit-backdrop-filter: blur(var(--blur-glass));
-  box-shadow: var(--shadow-card), inset 0 1px 0 rgba(255, 255, 255, 0.92), inset 0 -1px 0 rgba(139, 26, 58, 0.06);
+  box-shadow: var(--shadow-card), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(61, 0, 20, 0.05);
 }
 
 /* Hero */
@@ -846,10 +604,7 @@ section[id] {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background:
-    radial-gradient(ellipse 88% 70% at 50% 18%, rgba(255, 255, 255, 0.72) 0%, transparent 58%),
-    radial-gradient(ellipse 80% 58% at 72% 78%, rgba(248, 232, 237, 0.55) 0%, transparent 55%),
-    radial-gradient(ellipse 92% 72% at 38% 92%, rgba(232, 196, 207, 0.42) 0%, transparent 54%);
+  background: radial-gradient(ellipse 90% 65% at 50% 25%, rgba(255, 255, 255, 0.95) 0%, transparent 62%);
 }
 
 .hero-glow {
@@ -883,8 +638,8 @@ section[id] {
   inset: -35% -25%;
   z-index: 1;
   pointer-events: none;
-  background: radial-gradient(ellipse 58% 48% at 22% 72%, rgba(255, 255, 255, 0.45) 0%, transparent 58%),
-    radial-gradient(ellipse 52% 44% at 82% 32%, rgba(192, 64, 90, 0.12) 0%, transparent 55%);
+  background: radial-gradient(ellipse 58% 48% at 22% 72%, rgba(255, 255, 255, 0.35) 0%, transparent 58%),
+    radial-gradient(ellipse 52% 44% at 82% 32%, rgba(255, 255, 255, 0.18) 0%, transparent 55%);
   animation: hero-ambient-drift 105s var(--ease-premium) infinite;
 }
 
@@ -1180,15 +935,8 @@ html[lang='en'] .hero-couple-names {
   position: relative;
   z-index: 1;
   padding: clamp(4rem, 12vw, 7rem) 1.25rem;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.72) 0%,
-    rgba(253, 245, 247, 0.45) 22%,
-    transparent 30%,
-    transparent 70%,
-    rgba(248, 232, 237, 0.55) 100%
-  );
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), inset 0 -1px 0 rgba(139, 26, 58, 0.06);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.94) 50%, rgba(255, 255, 255, 0.98) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(61, 0, 20, 0.04);
 }
 
 .countdown-section::after,
@@ -1200,8 +948,8 @@ html[lang='en'] .hero-couple-names {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse 110% 65% at 50% -8%, rgba(232, 196, 207, 0.35) 0%, transparent 46%);
-  opacity: 0.85;
+  background: radial-gradient(ellipse 110% 65% at 50% -8%, rgba(255, 255, 255, 0.45) 0%, transparent 46%);
+  opacity: 0.6;
 }
 
 .countdown-section .container,
@@ -1413,7 +1161,7 @@ html[lang='en'] .hero-couple-names {
 .venue-shimmer {
   position: absolute;
   inset: -50%;
-  background: radial-gradient(circle at 50% 50%, rgba(248, 232, 237, 0.65) 0%, transparent 62%);
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.55) 0%, transparent 62%);
   opacity: 0.35;
   animation: none;
 }
@@ -1742,10 +1490,6 @@ body.is-switching-lang main {
     scroll-behavior: auto;
   }
 
-  html::before {
-    animation: none !important;
-  }
-
   *,
   *::before,
   *::after {
@@ -1754,26 +1498,9 @@ body.is-switching-lang main {
     transition-duration: 0.01ms !important;
   }
 
-  .night-sky__wash {
+  .page-bg__wave {
     animation: none !important;
-  }
-
-  .bridal-petal,
-  .bridal-sparkle {
-    animation: none !important;
-    opacity: 0.38 !important;
-  }
-
-  .night-star {
-    animation: none !important;
-    opacity: 0.74 !important;
-    filter: blur(0.3px) !important;
-  }
-
-  .shooting-star {
-    animation: none !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
+    transform: translateX(0) !important;
   }
 
   .cta-btn,

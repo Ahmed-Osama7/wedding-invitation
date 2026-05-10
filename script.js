@@ -36,12 +36,9 @@ const WEDDING_DATE = new Date(2026, 5, 5, 21, 0, 0);
 /** Canvas API instance set after DOM ready */
 let signaturePad = null;
 
-const STAR_TONES = ['night-star--t1', 'night-star--t2', 'night-star--t3', 'night-star--t4', 'night-star--t5'];
-
 const SELECTORS = {
   loadingScreen: '#loading-screen',
-  nightSkyStars: '#night-sky-stars',
-  bridalPetals: '#bridal-petals',
+  glitterCanvas: '#glitter-canvas',
   navToggle: '#nav-toggle',
   navBar: '.nav-bar',
   musicToggle: '#music-toggle',
@@ -227,58 +224,188 @@ function initLoadingScreen() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Bridal backdrop: floating petals/sparkles + twinkling stars                */
+/* Canvas glitter — organic sine motion, full document height               */
 /* -------------------------------------------------------------------------- */
 
-function createBridalPetals() {
-  const host = $(SELECTORS.bridalPetals);
-  if (!host) return;
+const GLITTER_COLORS = ['#8b1a3a', '#a02848', '#c0405a', '#6b1428'];
 
-  const mobile = window.matchMedia('(max-width: 768px)').matches;
-  const count = mobile ? 12 : 18;
-  const frag = document.createDocumentFragment();
-
-  for (let i = 0; i < count; i++) {
-    const el = document.createElement('span');
-    const sparkle = Math.random() > 0.48;
-    el.className = sparkle ? 'bridal-sparkle' : 'bridal-petal';
-    el.setAttribute('aria-hidden', 'true');
-    el.style.left = `${Math.random() * 100}%`;
-    el.style.animationDuration = `${16 + Math.random() * 26}s`;
-    el.style.animationDelay = `${Math.random() * -36}s`;
-    frag.appendChild(el);
-  }
-
-  host.appendChild(frag);
+function hexToRgb(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
 }
 
-/** ~150–190 twinkling stars; burgundy/rose tones; opacity & duration vary */
-function createNightStars() {
-  const host = $(SELECTORS.nightSkyStars);
-  if (!host) return;
+function docScrollHeight() {
+  const el = document.documentElement;
+  return Math.max(el.scrollHeight, document.body.scrollHeight, window.innerHeight);
+}
+
+function initGlitterCanvas() {
+  const canvas = $(SELECTORS.glitterCanvas);
+  if (!canvas || !canvas.getContext) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  const reduceMotion =
+    window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const mobile = window.matchMedia('(max-width: 768px)').matches;
-  const count = mobile ? 150 : 190;
-  const frag = document.createDocumentFragment();
+  const count = mobile ? 64 : 78;
 
-  for (let i = 0; i < count; i++) {
-    const s = document.createElement('span');
-    const tone = STAR_TONES[Math.floor(Math.random() * STAR_TONES.length)];
-    s.className = `night-star ${tone}`;
-    s.setAttribute('aria-hidden', 'true');
-    const px = 1 + Math.floor(Math.random() * 3);
-    s.style.width = `${px}px`;
-    s.style.height = `${px}px`;
-    s.style.left = `${Math.random() * 100}%`;
-    s.style.top = `${Math.random() * 100}%`;
-    const dur = 2 + Math.random() * 3;
-    const delay = Math.random() * 5;
-    s.style.animationDuration = `${dur.toFixed(2)}s`;
-    s.style.animationDelay = `${delay.toFixed(2)}s`;
-    frag.appendChild(s);
+  let particles = [];
+  let lastDocH = 0;
+  let lastInnerW = 0;
+  let framesSinceCheck = 0;
+
+  function buildParticles() {
+    const h = docScrollHeight();
+    const w = window.innerWidth;
+    lastDocH = h;
+    lastInnerW = w;
+    particles = [];
+
+    for (let i = 0; i < count; i++) {
+      const opacityLo = 0.3 + Math.random() * 0.22;
+      let opacityHi = opacityLo + 0.12 + Math.random() * 0.48;
+      opacityHi = Math.min(0.9, opacityHi);
+
+      particles.push({
+        baseX: Math.random() * w,
+        baseY: Math.random() * h,
+        fx: 0.055 + Math.random() * 0.1,
+        fy: 0.048 + Math.random() * 0.088,
+        fz: 0.038 + Math.random() * 0.072,
+        fw: 0.05 + Math.random() * 0.078,
+        px: Math.random() * Math.PI * 2,
+        py: Math.random() * Math.PI * 2,
+        pz: Math.random() * Math.PI * 2,
+        pw: Math.random() * Math.PI * 2,
+        ax: 12 + Math.random() * 32,
+        ay: 16 + Math.random() * 38,
+        az: 7 + Math.random() * 24,
+        aw: 8 + Math.random() * 22,
+        r: 0.75 + Math.random() * 1.0,
+        color: GLITTER_COLORS[(Math.random() * GLITTER_COLORS.length) | 0],
+        opFreq: 0.045 + Math.random() * 0.085,
+        opPhase: Math.random() * Math.PI * 2,
+        opacityLo,
+        opacityHi,
+        blur: 4 + Math.random() * 4,
+      });
+    }
   }
 
-  host.appendChild(frag);
+  function resizeCanvas() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    canvas.width = Math.floor(vw * dpr);
+    canvas.height = Math.floor(vh * dpr);
+    canvas.style.width = `${vw}px`;
+    canvas.style.height = `${vh}px`;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const nh = docScrollHeight();
+    if (particles.length === 0 || Math.abs(nh - lastDocH) > 40 || vw !== lastInnerW) {
+      buildParticles();
+    }
+    lastInnerW = vw;
+  }
+
+  function drawFrame(tSec) {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const sy = window.scrollY;
+
+    ctx.clearRect(0, 0, vw, vh);
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      const docX =
+        p.baseX + Math.sin(tSec * p.fx + p.px) * p.ax + Math.sin(tSec * p.fz + p.pz) * p.az;
+      const docY =
+        p.baseY + Math.sin(tSec * p.fy + p.py) * p.ay + Math.sin(tSec * p.fw + p.pw) * p.aw;
+
+      const sx = docX;
+      const screenY = docY - sy;
+
+      if (screenY < -50 || screenY > vh + 50) continue;
+
+      const opacity =
+        p.opacityLo + (p.opacityHi - p.opacityLo) * (0.5 + 0.5 * Math.sin(tSec * p.opFreq + p.opPhase));
+
+      const rgb = hexToRgb(p.color);
+      ctx.save();
+      ctx.shadowBlur = p.blur;
+      ctx.shadowColor = `rgba(${rgb.r},${rgb.g},${rgb.b},${opacity * 0.88})`;
+      ctx.fillStyle = `rgba(${rgb.r},${rgb.g},${rgb.b},${opacity})`;
+      ctx.beginPath();
+      ctx.arc(sx, screenY, p.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  function drawStatic() {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const sy = window.scrollY;
+    ctx.clearRect(0, 0, vw, vh);
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      const sx = p.baseX;
+      const screenY = p.baseY - sy;
+      if (screenY < -50 || screenY > vh + 50) continue;
+      const opacity = 0.42;
+      const rgb = hexToRgb(p.color);
+      ctx.save();
+      ctx.shadowBlur = p.blur * 0.65;
+      ctx.shadowColor = `rgba(${rgb.r},${rgb.g},${rgb.b},${opacity * 0.75})`;
+      ctx.fillStyle = `rgba(${rgb.r},${rgb.g},${rgb.b},${opacity})`;
+      ctx.beginPath();
+      ctx.arc(sx, screenY, p.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  buildParticles();
+  resizeCanvas();
+
+  if (reduceMotion) {
+    drawStatic();
+    window.addEventListener(
+      'resize',
+      debounce(() => {
+        resizeCanvas();
+        drawStatic();
+      }, 120)
+    );
+    window.addEventListener('scroll', () => drawStatic(), { passive: true });
+    return;
+  }
+
+  function loop(tMs) {
+    const tSec = tMs / 1000;
+    framesSinceCheck += 1;
+    if (framesSinceCheck >= 72) {
+      framesSinceCheck = 0;
+      const nh = docScrollHeight();
+      if (Math.abs(nh - lastDocH) > 48) {
+        buildParticles();
+      }
+    }
+    drawFrame(tSec);
+    requestAnimationFrame(loop);
+  }
+
+  requestAnimationFrame(loop);
+
+  window.addEventListener(
+    'resize',
+    debounce(() => {
+      resizeCanvas();
+    }, 100)
+  );
 }
 
 /* -------------------------------------------------------------------------- */
@@ -632,8 +759,7 @@ function boot() {
   initLanguageSwitcher();
 
   initLoadingScreen();
-  createBridalPetals();
-  createNightStars();
+  initGlitterCanvas();
   initSmoothScroll();
   initMobileNav();
   initMusicToggle();

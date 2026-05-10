@@ -94,19 +94,10 @@
       </div>
     </div>
 
-    <!-- Fixed bridal backdrop (does not scroll); stars & petals injected via JS -->
-    <div id="night-sky" class="night-sky" aria-hidden="true">
-      <div class="night-sky__wash" aria-hidden="true"></div>
-      <div class="night-sky__center-glow" aria-hidden="true"></div>
-      <div class="bridal-petals" id="bridal-petals" aria-hidden="true"></div>
-      <div class="night-sky__stars" id="night-sky-stars"></div>
-      <div class="shooting-stars" aria-hidden="true">
-        <span class="shooting-star"></span>
-        <span class="shooting-star"></span>
-        <span class="shooting-star"></span>
-        <span class="shooting-star"></span>
-        <span class="shooting-star"></span>
-      </div>
+    <!-- Minimal white backdrop: subtle bottom wave + canvas glitter (see script.js) -->
+    <div class="page-bg" aria-hidden="true">
+      <div class="page-bg__wave"></div>
+      <canvas id="glitter-canvas" class="glitter-canvas" width="300" height="150"></canvas>
     </div>
 
     <!-- Music toggle -->
