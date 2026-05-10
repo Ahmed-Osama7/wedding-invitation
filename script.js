@@ -269,6 +269,35 @@ function createParticles() {
   host.appendChild(frag);
 }
 
+/** Soft twinkling stars — warm gold/champagne, slow drift + 3–6s twinkle (with existing particles) */
+function createStars() {
+  const host = $(SELECTORS.particles);
+  if (!host) return;
+
+  const mobile = window.matchMedia('(max-width: 768px)').matches;
+  const count = mobile ? 24 : 40;
+  const frag = document.createDocumentFragment();
+  const glyphs = ['✦', '✧'];
+
+  for (let i = 0; i < count; i++) {
+    const s = document.createElement('span');
+    s.className = 'star-particle' + (i % 3 === 0 ? ' star-particle--champagne' : '');
+    s.setAttribute('aria-hidden', 'true');
+    s.textContent = glyphs[i % glyphs.length];
+    s.style.left = `${Math.random() * 100}%`;
+    s.style.top = `${Math.random() * 100}%`;
+    s.style.fontSize = `${3 + Math.random() * 5}px`;
+    const twDur = 3 + Math.random() * 3;
+    const driftDur = 85 + Math.random() * 55;
+    s.style.setProperty('--star-twinkle-dur', `${twDur.toFixed(2)}s`);
+    s.style.setProperty('--star-drift-dur', `${driftDur.toFixed(0)}s`);
+    s.style.animationDelay = `${(Math.random() * -8).toFixed(2)}s, ${(Math.random() * -6).toFixed(2)}s`;
+    frag.appendChild(s);
+  }
+
+  host.appendChild(frag);
+}
+
 /* -------------------------------------------------------------------------- */
 /* Smooth scroll & nav                                                        */
 /* -------------------------------------------------------------------------- */
@@ -621,6 +650,7 @@ function boot() {
 
   initLoadingScreen();
   createParticles();
+  createStars();
   initSmoothScroll();
   initMobileNav();
   initMusicToggle();
