@@ -233,7 +233,7 @@ function createParticles() {
 
   const mobile = window.matchMedia('(max-width: 768px)').matches;
   const mistCount = mobile ? 14 : 22;
-  const sparkleCount = mobile ? 16 : 28;
+  const sparkleCount = mobile ? 10 : 16;
   const frag = document.createDocumentFragment();
 
   for (let i = 0; i < mistCount; i++) {
@@ -282,7 +282,7 @@ function createStars() {
     const s = document.createElement('span');
     s.className = 'star-particle' + (i % 4 === 0 ? ' star-particle--champagne' : '');
     s.setAttribute('aria-hidden', 'true');
-    const px = 1 + Math.round(Math.random());
+    const px = 1 + Math.floor(Math.random() * 3);
     s.style.width = `${px}px`;
     s.style.height = `${px}px`;
     s.style.left = `${Math.random() * 100}%`;
@@ -293,6 +293,32 @@ function createStars() {
     s.style.setProperty('--star-drift-dur', `${driftDur.toFixed(0)}s`);
     s.style.animationDelay = `${(Math.random() * -12).toFixed(2)}s, ${(Math.random() * -10).toFixed(2)}s`;
     frag.appendChild(s);
+  }
+
+  host.appendChild(frag);
+}
+
+/** Sparse sparkle bursts — CSS-driven scale/opacity */
+function createSparkles() {
+  const host = $(SELECTORS.particles);
+  if (!host) return;
+
+  const mobile = window.matchMedia('(max-width: 768px)').matches;
+  const count = mobile ? 12 : 20;
+  const frag = document.createDocumentFragment();
+
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('span');
+    el.className = 'sparkle-dot';
+    el.setAttribute('aria-hidden', 'true');
+    const size = 3 + Math.random() * 5;
+    el.style.width = `${size}px`;
+    el.style.height = `${size}px`;
+    el.style.left = `${Math.random() * 100}%`;
+    el.style.top = `${Math.random() * 100}%`;
+    el.style.setProperty('--sparkle-dur', `${4.8 + Math.random() * 6}s`);
+    el.style.animationDelay = `${(Math.random() * -14).toFixed(2)}s`;
+    frag.appendChild(el);
   }
 
   host.appendChild(frag);
@@ -651,6 +677,7 @@ function boot() {
   initLoadingScreen();
   createParticles();
   createStars();
+  createSparkles();
   initSmoothScroll();
   initMobileNav();
   initMusicToggle();
