@@ -39,6 +39,8 @@ let signaturePad = null;
 const SELECTORS = {
   loadingScreen: '#loading-screen',
   particles: '#particles',
+  starFieldDistant: '#star-field-distant',
+  starFieldSparkle: '#star-field-sparkle',
   navToggle: '#nav-toggle',
   navBar: '.nav-bar',
   musicToggle: '#music-toggle',
@@ -269,56 +271,63 @@ function createParticles() {
   host.appendChild(frag);
 }
 
-/** Subtle background dots — 1–2px, slow drift + gentle opacity (styled in CSS) */
-function createStars() {
-  const host = $(SELECTORS.particles);
+function appendTwinkleStar(host, mode) {
+  const distant = mode === 'distant';
+  const wrap = document.createElement('span');
+  wrap.className = 'star-node';
+  wrap.setAttribute('aria-hidden', 'true');
+  const core = document.createElement('span');
+  core.className = 'star-node__core';
+  wrap.appendChild(core);
+
+  const px = 1 + Math.floor(Math.random() * 3);
+  core.style.width = `${px}px`;
+  core.style.height = `${px}px`;
+  core.style.setProperty('--star-blur', px <= 1 ? '0.55px' : px === 2 ? '0.7px' : '0.95px');
+
+  wrap.style.left = `${Math.random() * 100}%`;
+  wrap.style.top = `${Math.random() * 100}%`;
+
+  const twDur = distant ? 3.2 + Math.random() * 6.8 : 1.8 + Math.random() * 4.2;
+  const floatDur = distant ? 100 + Math.random() * 100 : 65 + Math.random() * 75;
+
+  wrap.style.setProperty('--star-twinkle-dur', `${twDur.toFixed(2)}s`);
+  wrap.style.setProperty('--star-float-dur', `${floatDur.toFixed(0)}s`);
+
+  const fd = parseFloat(floatDur);
+  wrap.style.animationDelay = `${(Math.random() * -fd).toFixed(2)}s`;
+  core.style.animationDelay = `${(Math.random() * -30).toFixed(2)}s`;
+
+  host.appendChild(wrap);
+}
+
+/** Layer 1: dense distant stars — slow float + twinkle + scale */
+function createStarFieldDistant() {
+  const host = $(SELECTORS.starFieldDistant);
   if (!host) return;
 
   const mobile = window.matchMedia('(max-width: 768px)').matches;
-  const count = mobile ? 28 : 44;
+  const count = mobile ? 38 : 58;
   const frag = document.createDocumentFragment();
 
   for (let i = 0; i < count; i++) {
-    const s = document.createElement('span');
-    s.className = 'star-particle' + (i % 4 === 0 ? ' star-particle--champagne' : '');
-    s.setAttribute('aria-hidden', 'true');
-    const px = 1 + Math.floor(Math.random() * 3);
-    s.style.width = `${px}px`;
-    s.style.height = `${px}px`;
-    s.style.left = `${Math.random() * 100}%`;
-    s.style.top = `${Math.random() * 100}%`;
-    const twDur = 10 + Math.random() * 16;
-    const driftDur = 120 + Math.random() * 80;
-    s.style.setProperty('--star-twinkle-dur', `${twDur.toFixed(2)}s`);
-    s.style.setProperty('--star-drift-dur', `${driftDur.toFixed(0)}s`);
-    s.style.animationDelay = `${(Math.random() * -12).toFixed(2)}s, ${(Math.random() * -10).toFixed(2)}s`;
-    frag.appendChild(s);
+    appendTwinkleStar(frag, 'distant');
   }
 
   host.appendChild(frag);
 }
 
-/** Sparse sparkle bursts — CSS-driven scale/opacity */
-function createSparkles() {
-  const host = $(SELECTORS.particles);
+/** Layer 2: fewer brighter blinking stars */
+function createStarFieldSparkle() {
+  const host = $(SELECTORS.starFieldSparkle);
   if (!host) return;
 
   const mobile = window.matchMedia('(max-width: 768px)').matches;
-  const count = mobile ? 12 : 20;
+  const count = mobile ? 10 : 16;
   const frag = document.createDocumentFragment();
 
   for (let i = 0; i < count; i++) {
-    const el = document.createElement('span');
-    el.className = 'sparkle-dot';
-    el.setAttribute('aria-hidden', 'true');
-    const size = 3 + Math.random() * 5;
-    el.style.width = `${size}px`;
-    el.style.height = `${size}px`;
-    el.style.left = `${Math.random() * 100}%`;
-    el.style.top = `${Math.random() * 100}%`;
-    el.style.setProperty('--sparkle-dur', `${4.8 + Math.random() * 6}s`);
-    el.style.animationDelay = `${(Math.random() * -14).toFixed(2)}s`;
-    frag.appendChild(el);
+    appendTwinkleStar(frag, 'sparkle');
   }
 
   host.appendChild(frag);
@@ -676,8 +685,8 @@ function boot() {
 
   initLoadingScreen();
   createParticles();
-  createStars();
-  createSparkles();
+  createStarFieldDistant();
+  createStarFieldSparkle();
   initSmoothScroll();
   initMobileNav();
   initMusicToggle();

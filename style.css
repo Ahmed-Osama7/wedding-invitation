@@ -70,12 +70,12 @@ body {
   isolation: isolate;
 }
 
-/* Layer -2: soft burgundy light waves (transparent → burgundy → transparent) */
+/* Layer -1: soft burgundy light waves (under shimmer, over star fields) */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: -2;
+  z-index: -1;
   pointer-events: none;
   opacity: 1;
   background:
@@ -123,39 +123,6 @@ body::before {
       45% 72%,
       10% 12%,
       4% 6%;
-    opacity: 0.12;
-  }
-}
-
-/* Layer -1: diagonal white shimmer streaks (above waves, below content) */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 1;
-  background: linear-gradient(
-    128deg,
-    transparent 36%,
-    rgba(255, 255, 255, 0) 42%,
-    rgba(255, 255, 255, 0.55) 50.5%,
-    rgba(255, 255, 255, 0) 58%,
-    transparent 64%
-  );
-  background-size: 240% 240%;
-  background-position: 65% 35%;
-  animation: bg-shimmer-sweep 42s ease-in-out infinite;
-}
-
-@keyframes bg-shimmer-sweep {
-  0%,
-  100% {
-    background-position: 72% 18%;
-    opacity: 0.05;
-  }
-  50% {
-    background-position: 28% 82%;
     opacity: 0.12;
   }
 }
@@ -251,9 +218,26 @@ a {
   }
 }
 
-/*
- * Layer -3: stars + mist + sparkles (below waves -2 & shimmer -1; main z-index 1)
- */
+/* --- Star fields (parallax): distant -3, sparkle -2 | mist -4 | waves -1 | shimmer 0 | main 1 --- */
+.star-field {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.star-field--distant {
+  z-index: -3;
+}
+
+.star-field--sparkle {
+  z-index: -2;
+}
+
+/* Soft mist — deepest interactive decoration layer */
 .particles {
   pointer-events: none;
   position: fixed;
@@ -261,8 +245,42 @@ a {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -3;
+  z-index: -4;
   overflow: visible;
+}
+
+/* Layer 0: diagonal shimmer (above waves, below main) */
+.bg-shimmer {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background: linear-gradient(
+    128deg,
+    transparent 36%,
+    rgba(255, 255, 255, 0) 42%,
+    rgba(255, 255, 255, 0.55) 50.5%,
+    rgba(255, 255, 255, 0) 58%,
+    transparent 64%
+  );
+  background-size: 240% 240%;
+  background-position: 65% 35%;
+  animation: bg-shimmer-sweep 42s ease-in-out infinite;
+}
+
+@keyframes bg-shimmer-sweep {
+  0%,
+  100% {
+    background-position: 72% 18%;
+    opacity: 0.05;
+  }
+  50% {
+    background-position: 28% 82%;
+    opacity: 0.12;
+  }
 }
 
 .particle {
@@ -332,100 +350,101 @@ a {
   }
 }
 
-/* Layer -3 stars — white + pink tint, micro-blur glow, strong enough for #fafafa */
-.star-particle {
+/* Wrapper = slow float; core = twinkle + scale (real multi-prop animation) */
+.star-node {
   position: absolute;
-  z-index: 0;
   pointer-events: none;
   user-select: none;
+  will-change: transform;
+}
+
+.star-node__core {
   display: block;
   border-radius: 50%;
-  background: radial-gradient(circle, #ffffff 0%, rgba(255, 236, 244, 0.92) 55%, rgba(255, 220, 235, 0.65) 100%);
-  box-shadow:
-    0 0 3px 1px rgba(255, 245, 252, 0.85),
-    0 0 12px 4px rgba(255, 228, 238, 0.45),
-    0 0 22px 6px rgba(255, 210, 228, 0.2);
-  filter: blur(0.65px);
-  text-shadow: none;
-  color: transparent;
-  font-size: 0;
-  line-height: 0;
-  overflow: visible;
-  will-change: transform, opacity;
-  animation-name: star-drift, star-twinkle;
-  animation-duration: var(--star-drift-dur, 160s), var(--star-twinkle-dur, 16s);
-  animation-timing-function: ease-in-out, ease-in-out;
-  animation-iteration-count: infinite, infinite;
+  background: #ffffff;
+  transform-origin: center center;
+  will-change: transform, opacity, filter;
 }
 
-.star-particle--champagne {
-  background: radial-gradient(circle, #ffffff 0%, rgba(255, 232, 242, 0.88) 50%, rgba(255, 214, 230, 0.55) 100%);
-  box-shadow:
-    0 0 4px 1px rgba(255, 238, 246, 0.9),
-    0 0 14px 5px rgba(255, 218, 232, 0.42),
-    0 0 26px 8px rgba(255, 200, 220, 0.18);
-  filter: blur(0.85px);
+/* Distant field: softer glow, slower parallax */
+.star-field--distant .star-node {
+  animation: star-float-distant var(--star-float-dur, 140s) ease-in-out infinite;
 }
 
-@keyframes star-twinkle {
+.star-field--distant .star-node__core {
+  box-shadow:
+    0 0 2px 1px rgba(255, 255, 255, 0.95),
+    0 0 10px 3px rgba(255, 240, 248, 0.5),
+    0 0 20px 6px rgba(255, 228, 238, 0.22);
+  filter: blur(var(--star-blur, 0.65px));
+  animation: star-twinkle-distant var(--star-twinkle-dur, 5.5s) ease-in-out infinite;
+}
+
+/* Brighter “sparkle” field: fewer stars, stronger blink */
+.star-field--sparkle .star-node {
+  animation: star-float-sparkle var(--star-float-dur, 95s) ease-in-out infinite;
+}
+
+.star-field--sparkle .star-node__core {
+  box-shadow:
+    0 0 3px 1px rgba(255, 255, 255, 1),
+    0 0 14px 5px rgba(255, 248, 252, 0.75),
+    0 0 28px 10px rgba(255, 230, 245, 0.35);
+  filter: blur(var(--star-blur, 0.75px));
+  animation: star-twinkle-sparkle var(--star-twinkle-dur, 3.2s) ease-in-out infinite;
+}
+
+@keyframes star-twinkle-distant {
   0%,
   100% {
-    opacity: 0.3;
+    opacity: 0.2;
+    transform: scale(0.8);
   }
   50% {
-    opacity: 0.7;
+    opacity: 1;
+    transform: scale(1.3);
   }
 }
 
-@keyframes star-drift {
+@keyframes star-twinkle-sparkle {
   0%,
   100% {
-    transform: translate(0, 0);
+    opacity: 0.15;
+    transform: scale(0.75);
   }
-  25% {
-    transform: translate(8px, -6px);
+  40% {
+    opacity: 1;
+    transform: scale(1.35);
   }
-  50% {
-    transform: translate(-10px, -10px);
-  }
-  75% {
-    transform: translate(-12px, 8px);
-  }
-}
-
-/* Occasional sparkle pops — scale + fade */
-.sparkle-dot {
-  position: absolute;
-  pointer-events: none;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(255, 236, 244, 0.5) 45%, transparent 72%);
-  box-shadow: 0 0 10px rgba(255, 245, 252, 0.65), 0 0 4px rgba(128, 0, 32, 0.12);
-  z-index: 0;
-  will-change: transform, opacity;
-  animation: sparkle-burst var(--sparkle-dur, 5.5s) ease-in-out infinite;
-}
-
-@keyframes sparkle-burst {
-  0%,
-  100% {
-    opacity: 0;
-    transform: scale(0.35);
-  }
-  12% {
-    opacity: 0.85;
-    transform: scale(1);
-  }
-  35% {
-    opacity: 0.35;
+  65% {
+    opacity: 0.2;
     transform: scale(0.85);
   }
-  55% {
-    opacity: 0.65;
-    transform: scale(1.05);
+}
+
+@keyframes star-float-distant {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
   }
-  78% {
-    opacity: 0;
-    transform: scale(0.5);
+  33% {
+    transform: translate3d(-18px, 12px, 0);
+  }
+  66% {
+    transform: translate3d(14px, -16px, 0);
+  }
+}
+
+@keyframes star-float-sparkle {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40% {
+    transform: translate3d(22px, -14px, 0);
+  }
+  75% {
+    transform: translate3d(-16px, 18px, 0);
   }
 }
 
@@ -1720,9 +1739,13 @@ body.is-switching-lang main {
   }
 
   html::before,
-  body::before,
-  body::after {
+  body::before {
     animation: none !important;
+  }
+
+  .bg-shimmer {
+    animation: none !important;
+    opacity: 0.06 !important;
   }
 
   *,
@@ -1744,16 +1767,15 @@ body.is-switching-lang main {
     box-shadow: none !important;
   }
 
-  .star-particle {
+  .star-node {
     animation: none !important;
-    opacity: 0.48 !important;
-    filter: none !important;
-    text-shadow: none !important;
   }
 
-  .sparkle-dot {
+  .star-node__core {
     animation: none !important;
-    opacity: 0 !important;
+    opacity: 0.52 !important;
+    transform: scale(1) !important;
+    filter: none !important;
   }
 
   .cta-btn,
