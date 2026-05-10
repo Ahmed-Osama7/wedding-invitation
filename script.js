@@ -266,17 +266,14 @@ function initEnvelopeIntro() {
 
     window.setTimeout(() => {
       intro.classList.add('envelope-intro--fly');
-    }, 600);
+    }, 900);
 
     window.setTimeout(() => {
       intro.classList.add('envelope-intro--fadeout');
-    }, 1200);
-
-    window.setTimeout(() => {
       siteContent.classList.add('site-content--revealed');
-    }, 1400);
+    }, 1600);
 
-    window.setTimeout(finalizeIntro, 1600);
+    window.setTimeout(finalizeIntro, 2000);
   }
 
   btn.addEventListener('click', handleOpen);
