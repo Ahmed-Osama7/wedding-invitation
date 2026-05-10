@@ -85,6 +85,15 @@
     </style>
   </head>
   <body translate="no" class="notranslate">
+    <script>
+      (function () {
+        try {
+          if (sessionStorage.getItem('envelopeOpened') === 'true') {
+            document.documentElement.classList.add('envelope-skipped');
+          }
+        } catch (e) {}
+      })();
+    </script>
     <!-- Luxury backdrop: gradient + satin shimmer + canvas — first in body so fixed layers stack correctly (see style.css, script.js) -->
     <div class="page-bg-gradient" aria-hidden="true"></div>
     <div class="page-bg-shimmer" aria-hidden="true"></div>
@@ -99,6 +108,42 @@
       </div>
     </div>
 
+    <!-- Envelope intro — tap to enter (above canvas, below loading screen until load completes) -->
+    <div
+      id="envelope-intro"
+      class="envelope-intro"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="envelope-hint"
+      aria-hidden="false"
+    >
+      <div class="envelope-intro__inner">
+        <button
+          type="button"
+          class="envelope-intro__open"
+          id="envelope-open-btn"
+          aria-describedby="envelope-hint"
+          data-i18n-attr="aria-label:envelope.openAria"
+          aria-label="Open wedding invitation"
+        >
+          <span class="envelope-intro__stage envelope-intro__stage--float">
+            <span class="envelope-3d">
+              <span class="envelope-3d__perspective">
+                <span class="envelope-3d__half envelope-3d__half--top">
+                  <span class="envelope-3d__face envelope-3d__face--top" aria-hidden="true"></span>
+                </span>
+                <span class="envelope-3d__half envelope-3d__half--bottom">
+                  <span class="envelope-3d__face envelope-3d__face--bottom" aria-hidden="true"></span>
+                </span>
+              </span>
+            </span>
+          </span>
+        </button>
+        <p id="envelope-hint" class="envelope-intro__hint" data-i18n="envelope.hint">Touch to Open</p>
+      </div>
+    </div>
+
+    <div id="site-content" class="site-content">
     <!-- Music toggle -->
     <button
       type="button"
@@ -411,6 +456,7 @@
         </div>
       </footer>
     </main>
+    </div>
 
     <script type="module" src="script.js"></script>
   </body>

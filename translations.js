@@ -17,6 +17,10 @@ export const TRANSLATIONS = {
     loading: {
       text: 'ننتظر لحظتكم الجميلة',
     },
+    envelope: {
+      hint: 'اضغط لفتح الدعوة',
+      openAria: 'افتح دعوة الزفاف',
+    },
     music: {
       ariaLabel: 'تشغيل أو إيقاف الموسيقى الخلفية',
       title: 'الموسيقى',
@@ -113,6 +117,10 @@ export const TRANSLATIONS = {
     },
     loading: {
       text: 'Awaiting your beautiful moment',
+    },
+    envelope: {
+      hint: 'Touch to Open',
+      openAria: 'Open wedding invitation',
     },
     music: {
       ariaLabel: 'Play or pause background music',
