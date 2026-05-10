@@ -4,7 +4,7 @@
 
 :root {
   color-scheme: light;
-  --bg-deep: #f5f5f5;
+  --bg-deep: #fafafa;
   --bg-mid: #ececec;
   --border-default: #dcdcdc;
   --lux-glow: rgba(128, 0, 32, 0.04);
@@ -47,63 +47,16 @@ html {
   background-color: var(--bg-deep);
 }
 
-/* Embossed-card paper grain — deepest layer */
+/* Deepest: ultra-light paper grain (below all themed layers) */
 html::before {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: -5;
+  z-index: -6;
   pointer-events: none;
-  opacity: 0.055;
+  opacity: 0.06;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
   mix-blend-mode: multiply;
-}
-
-/* Soft burgundy light waves — slow drift, low opacity */
-html::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -4;
-  pointer-events: none;
-  background:
-    linear-gradient(118deg, transparent 32%, rgba(128, 0, 32, 0.09) 48%, transparent 64%),
-    linear-gradient(232deg, transparent 38%, rgba(255, 250, 252, 0.14) 52%, transparent 68%),
-    radial-gradient(ellipse 85% 55% at 75% 25%, rgba(128, 0, 32, 0.07) 0%, transparent 58%),
-    radial-gradient(ellipse 70% 50% at 18% 78%, rgba(128, 0, 32, 0.05) 0%, transparent 55%);
-  background-size:
-    160% 160%,
-    140% 140%,
-    100% 100%,
-    100% 100%;
-  background-position:
-    20% 40%,
-    80% 60%,
-    0% 0%,
-    0% 0%;
-  animation: glow-wave-flow 52s var(--ease-premium) infinite;
-}
-
-@keyframes glow-wave-flow {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-    background-position:
-      12% 35%,
-      88% 65%,
-      0% 0%,
-      0% 0%;
-    opacity: 0.08;
-  }
-  50% {
-    transform: translate3d(-2.5%, 2%, 0) scale(1.03);
-    background-position:
-      42% 58%,
-      58% 42%,
-      8% 6%,
-      4% 4%;
-    opacity: 0.14;
-  }
 }
 
 body {
@@ -117,30 +70,93 @@ body {
   isolation: isolate;
 }
 
-/* Ambient glow — white + whisper burgundy (above waves, below stars) */
+/* Layer -2: soft burgundy light waves (transparent → burgundy → transparent) */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: -3;
+  z-index: -2;
   pointer-events: none;
+  opacity: 1;
   background:
-    radial-gradient(ellipse 115% 95% at 50% 6%, rgba(255, 255, 255, 0.72) 0%, transparent 54%),
-    radial-gradient(ellipse 95% 75% at 82% 88%, rgba(128, 0, 32, 0.055) 0%, transparent 52%),
-    radial-gradient(ellipse 88% 70% at 12% 42%, rgba(255, 245, 248, 0.42) 0%, transparent 52%),
-    radial-gradient(ellipse 88% 72% at 12% 88%, rgba(236, 236, 236, 0.38) 0%, transparent 50%),
-    radial-gradient(ellipse 80% 65% at 88% 35%, rgba(220, 220, 220, 0.1) 0%, transparent 48%),
-    linear-gradient(180deg, rgba(31, 31, 31, 0.01) 0%, transparent 42%, transparent 58%, rgba(31, 31, 31, 0.012) 100%);
-  animation: cinematic-bg-drift 200s var(--ease-premium) infinite;
+    linear-gradient(105deg, transparent 28%, rgba(128, 0, 32, 0.11) 48%, transparent 68%),
+    linear-gradient(215deg, transparent 35%, rgba(128, 0, 32, 0.07) 52%, transparent 65%),
+    radial-gradient(ellipse 90% 60% at 78% 22%, rgba(128, 0, 32, 0.09) 0%, transparent 58%),
+    radial-gradient(ellipse 75% 55% at 18% 82%, rgba(128, 0, 32, 0.06) 0%, transparent 56%);
+  background-size:
+    170% 170%,
+    150% 150%,
+    100% 100%,
+    100% 100%;
+  background-position:
+    15% 45%,
+    85% 55%,
+    0% 0%,
+    0% 0%;
+  animation: bg-wave-flow 56s ease-in-out infinite;
 }
 
-@keyframes cinematic-bg-drift {
+@keyframes bg-wave-flow {
   0%,
   100% {
     transform: translate3d(0, 0, 0) scale(1);
+    background-position:
+      10% 38%,
+      90% 62%,
+      4% 8%,
+      6% 10%;
+    opacity: 0.08;
+  }
+  33% {
+    transform: translate3d(1.8%, -1.2%, 0) scale(1.015);
+    background-position:
+      38% 52%,
+      62% 48%,
+      12% 4%,
+      8% 14%;
+    opacity: 0.15;
+  }
+  66% {
+    transform: translate3d(-1.5%, 1.4%, 0) scale(1.012);
+    background-position:
+      55% 28%,
+      45% 72%,
+      10% 12%,
+      4% 6%;
+    opacity: 0.12;
+  }
+}
+
+/* Layer -1: diagonal white shimmer streaks (above waves, below content) */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 1;
+  background: linear-gradient(
+    128deg,
+    transparent 36%,
+    rgba(255, 255, 255, 0) 42%,
+    rgba(255, 255, 255, 0.55) 50.5%,
+    rgba(255, 255, 255, 0) 58%,
+    transparent 64%
+  );
+  background-size: 240% 240%;
+  background-position: 65% 35%;
+  animation: bg-shimmer-sweep 42s ease-in-out infinite;
+}
+
+@keyframes bg-shimmer-sweep {
+  0%,
+  100% {
+    background-position: 72% 18%;
+    opacity: 0.05;
   }
   50% {
-    transform: translate3d(-0.5%, 0.35%, 0) scale(1.008);
+    background-position: 28% 82%;
+    opacity: 0.12;
   }
 }
 
@@ -235,7 +251,9 @@ a {
   }
 }
 
-/* Mist + stars + sparkles — fixed behind page content (see main z-index) */
+/*
+ * Layer -3: stars + mist + sparkles (below waves -2 & shimmer -1; main z-index 1)
+ */
 .particles {
   pointer-events: none;
   position: fixed;
@@ -243,15 +261,15 @@ a {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
-  overflow: hidden;
+  z-index: -3;
+  overflow: visible;
 }
 
 .particle {
   position: absolute;
   bottom: -12px;
   border-radius: 50%;
-  background: rgba(200, 200, 200, 0.22);
+  background: rgba(200, 200, 200, 0.14);
   animation-name: float-up;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
@@ -260,7 +278,7 @@ a {
 .particle--sparkle {
   bottom: -8px;
   border-radius: 50%;
-  background: rgba(210, 210, 210, 0.18);
+  background: rgba(210, 210, 210, 0.12);
   animation-name: sparkle-rise;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
@@ -314,7 +332,7 @@ a {
   }
 }
 
-/* Background stars — pink-white dots + soft halo (blur via shadow, not filter) */
+/* Layer -3 stars — white + pink tint, micro-blur glow, strong enough for #fafafa */
 .star-particle {
   position: absolute;
   z-index: 0;
@@ -322,11 +340,12 @@ a {
   user-select: none;
   display: block;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 252, 254, 1) 0%, rgba(255, 236, 244, 0.85) 100%);
+  background: radial-gradient(circle, #ffffff 0%, rgba(255, 236, 244, 0.92) 55%, rgba(255, 220, 235, 0.65) 100%);
   box-shadow:
-    0 0 4px 1px rgba(255, 238, 246, 0.55),
-    0 0 14px 3px rgba(255, 230, 240, 0.28);
-  filter: none;
+    0 0 3px 1px rgba(255, 245, 252, 0.85),
+    0 0 12px 4px rgba(255, 228, 238, 0.45),
+    0 0 22px 6px rgba(255, 210, 228, 0.2);
+  filter: blur(0.65px);
   text-shadow: none;
   color: transparent;
   font-size: 0;
@@ -334,25 +353,27 @@ a {
   overflow: visible;
   will-change: transform, opacity;
   animation-name: star-drift, star-twinkle;
-  animation-duration: var(--star-drift-dur, 140s), var(--star-twinkle-dur, 14s);
+  animation-duration: var(--star-drift-dur, 160s), var(--star-twinkle-dur, 16s);
   animation-timing-function: ease-in-out, ease-in-out;
   animation-iteration-count: infinite, infinite;
 }
 
 .star-particle--champagne {
-  background: radial-gradient(circle, rgba(255, 245, 250, 1) 0%, rgba(255, 228, 238, 0.75) 100%);
+  background: radial-gradient(circle, #ffffff 0%, rgba(255, 232, 242, 0.88) 50%, rgba(255, 214, 230, 0.55) 100%);
   box-shadow:
-    0 0 5px 1px rgba(255, 220, 235, 0.45),
-    0 0 16px 4px rgba(255, 210, 228, 0.22);
+    0 0 4px 1px rgba(255, 238, 246, 0.9),
+    0 0 14px 5px rgba(255, 218, 232, 0.42),
+    0 0 26px 8px rgba(255, 200, 220, 0.18);
+  filter: blur(0.85px);
 }
 
 @keyframes star-twinkle {
   0%,
   100% {
-    opacity: 0.2;
+    opacity: 0.3;
   }
   50% {
-    opacity: 0.6;
+    opacity: 0.7;
   }
 }
 
@@ -361,17 +382,14 @@ a {
   100% {
     transform: translate(0, 0);
   }
-  20% {
-    transform: translate(10px, -8px);
+  25% {
+    transform: translate(8px, -6px);
   }
-  45% {
-    transform: translate(-12px, -14px);
+  50% {
+    transform: translate(-10px, -10px);
   }
-  70% {
-    transform: translate(-14px, 10px);
-  }
-  90% {
-    transform: translate(8px, 12px);
+  75% {
+    transform: translate(-12px, 8px);
   }
 }
 
@@ -1702,8 +1720,8 @@ body.is-switching-lang main {
   }
 
   html::before,
-  html::after,
-  body::before {
+  body::before,
+  body::after {
     animation: none !important;
   }
 
@@ -1728,7 +1746,8 @@ body.is-switching-lang main {
 
   .star-particle {
     animation: none !important;
-    opacity: 0.35 !important;
+    opacity: 0.48 !important;
+    filter: none !important;
     text-shadow: none !important;
   }
 
