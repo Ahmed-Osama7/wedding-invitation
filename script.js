@@ -232,19 +232,11 @@ function initLoadingScreen() {
   }, 4500);
 }
 
-const ENVELOPE_SESSION_KEY = 'envelopeOpened';
-
 function initEnvelopeIntro() {
   const intro = document.getElementById('envelope-intro');
   const siteContent = document.getElementById('site-content');
   const btn = document.getElementById('envelope-open-btn');
   if (!intro || !siteContent || !btn) return;
-
-  if (document.documentElement.classList.contains('envelope-skipped')) {
-    intro.setAttribute('aria-hidden', 'true');
-    intro.hidden = true;
-    return;
-  }
 
   const reduceMotion =
     window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -252,11 +244,6 @@ function initEnvelopeIntro() {
   let started = false;
 
   function finalizeIntro() {
-    try {
-      sessionStorage.setItem(ENVELOPE_SESSION_KEY, 'true');
-    } catch (_) {
-      /* ignore */
-    }
     document.documentElement.classList.add('envelope-skipped');
     intro.setAttribute('aria-hidden', 'true');
     intro.hidden = true;

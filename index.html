@@ -121,15 +121,6 @@
     </style>
   </head>
   <body translate="no" class="notranslate">
-    <script>
-      (function () {
-        try {
-          if (sessionStorage.getItem('envelopeOpened') === 'true') {
-            document.documentElement.classList.add('envelope-skipped');
-          }
-        } catch (e) {}
-      })();
-    </script>
     <!-- Luxury backdrop: gradient + satin shimmer + canvas — first in body so fixed layers stack correctly (see style.css, script.js) -->
     <div class="page-bg-gradient" aria-hidden="true"></div>
     <div class="page-bg-shimmer" aria-hidden="true"></div>
