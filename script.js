@@ -239,7 +239,7 @@ function createParticles() {
   for (let i = 0; i < mistCount; i++) {
     const p = document.createElement('span');
     p.className = 'particle';
-    const size = 2 + Math.random() * 3.5;
+    const size = 3 + Math.random() * 3.8;
     const left = Math.random() * 100;
     const duration = 18 + Math.random() * 26;
     const delay = Math.random() * -30;
@@ -254,7 +254,7 @@ function createParticles() {
   for (let i = 0; i < sparkleCount; i++) {
     const p = document.createElement('span');
     p.className = 'particle particle--sparkle';
-    const size = 1 + Math.random() * 2.8;
+    const size = 2 + Math.random() * 3.2;
     const left = Math.random() * 100;
     const duration = 32 + Math.random() * 36;
     const delay = Math.random() * -40;
