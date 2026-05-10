@@ -321,14 +321,6 @@ a {
 }
 
 .night-star--t3 {
-  background: #7a1a32;
-  box-shadow:
-    0 0 2px 1px rgba(122, 26, 50, 0.98),
-    0 0 12px 4px rgba(139, 32, 64, 0.55),
-    0 0 22px 8px rgba(160, 40, 72, 0.34);
-}
-
-.night-star--t4 {
   background: #8b2040;
   box-shadow:
     0 0 2px 1px rgba(139, 32, 64, 0.98),
@@ -336,12 +328,20 @@ a {
     0 0 22px 8px rgba(176, 52, 84, 0.36);
 }
 
-.night-star--t5 {
+.night-star--t4 {
   background: #a02848;
   box-shadow:
     0 0 2px 1px rgba(160, 40, 72, 0.98),
-    0 0 12px 4px rgba(176, 52, 84, 0.5),
-    0 0 22px 8px rgba(192, 68, 96, 0.34);
+    0 0 12px 4px rgba(176, 52, 84, 0.52),
+    0 0 22px 8px rgba(192, 68, 96, 0.36);
+}
+
+.night-star--t5 {
+  background: #5a0f20;
+  box-shadow:
+    0 0 2px 1px rgba(90, 15, 32, 0.98),
+    0 0 13px 5px rgba(107, 20, 40, 0.65),
+    0 0 26px 10px rgba(122, 26, 50, 0.42);
 }
 
 @keyframes night-twinkle {
