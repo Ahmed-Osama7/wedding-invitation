@@ -29,6 +29,8 @@
   --font-display: 'Cormorant Garamond', 'Noto Naskh Arabic', serif;
   --font-body: 'Outfit', 'Noto Naskh Arabic', system-ui, sans-serif;
   --nav-h: 72px;
+  --reveal-duration: 0.75s;
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 *,
@@ -152,7 +154,7 @@ a {
   }
 }
 
-/* Particles */
+/* Particles + VIP glitter sparkles */
 .particles {
   pointer-events: none;
   position: fixed;
@@ -165,9 +167,25 @@ a {
   position: absolute;
   bottom: -12px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(216, 188, 122, 0.38), transparent 70%);
+  background: radial-gradient(circle, rgba(216, 188, 122, 0.28), transparent 72%);
   animation-name: float-up;
   animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* Smaller gold glitter dots — low density, slow twinkle */
+.particle--sparkle {
+  bottom: -8px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(198, 161, 91, 0.55) 0%,
+    rgba(216, 188, 122, 0.22) 42%,
+    transparent 72%
+  );
+  box-shadow: 0 0 10px rgba(216, 188, 122, 0.22), 0 0 3px rgba(198, 161, 91, 0.35);
+  animation-name: sparkle-rise;
+  animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
@@ -184,6 +202,34 @@ a {
   }
   100% {
     transform: translateY(-110vh) translateX(18px);
+    opacity: 0;
+  }
+}
+
+@keyframes sparkle-rise {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.85);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.55;
+  }
+  28% {
+    opacity: 0.22;
+  }
+  48% {
+    opacity: 0.48;
+    transform: translateY(-48vh) translateX(10px) scale(1);
+  }
+  62% {
+    opacity: 0.18;
+  }
+  82% {
+    opacity: 0.42;
+    transform: translateY(-88vh) translateX(-6px) scale(0.95);
+  }
+  100% {
+    transform: translateY(-115vh) translateX(14px) scale(0.75);
     opacity: 0;
   }
 }
@@ -288,6 +334,27 @@ a {
   text-transform: uppercase;
   color: var(--ivory);
   text-shadow: 0 0 28px rgba(216, 188, 122, 0.45), 0 0 2px rgba(198, 161, 91, 0.12);
+  position: relative;
+  isolation: isolate;
+}
+
+.nav-brand::after {
+  content: '';
+  position: absolute;
+  inset: -0.15em -0.25em;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(216, 188, 122, 0.12) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: 240% 100%;
+  animation: title-shimmer 16s var(--ease-premium) infinite;
+  pointer-events: none;
+  opacity: 0.65;
+  mix-blend-mode: soft-light;
 }
 
 .nav-toolbar {
@@ -591,7 +658,7 @@ section[id] {
   border-radius: 50%;
   filter: blur(80px);
   opacity: 0.35;
-  animation: drift 18s ease-in-out infinite;
+  animation: drift 18s ease-in-out infinite, hero-lux-pulse 14s ease-in-out infinite;
 }
 
 .hero-glow--1 {
@@ -614,6 +681,16 @@ section[id] {
   }
   50% {
     transform: translate(-30px, 24px) scale(1.08);
+  }
+}
+
+@keyframes hero-lux-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.42;
   }
 }
 
@@ -642,6 +719,28 @@ section[id] {
   margin: 0 0 1rem;
   letter-spacing: 0.02em;
   text-shadow: 0 0 36px rgba(216, 188, 122, 0.35), 0 0 2px rgba(198, 161, 91, 0.12);
+  position: relative;
+  isolation: isolate;
+}
+
+.hero-title::after {
+  content: '';
+  position: absolute;
+  inset: -0.08em -6%;
+  border-radius: 0.15em;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 38%,
+    rgba(216, 188, 122, 0.11) 50%,
+    transparent 62%,
+    transparent 100%
+  );
+  background-size: 220% 100%;
+  animation: title-shimmer 18s var(--ease-premium) infinite;
+  pointer-events: none;
+  opacity: 0.75;
+  mix-blend-mode: soft-light;
 }
 
 .hero-couple-names {
@@ -767,14 +866,20 @@ html[lang='en'] .hero-couple-names {
   }
 }
 
-/* Section rhythm */
-.section-reveal {
+/* Section rhythm — scroll reveal (Intersection Observer adds --visible once) */
+.section-reveal .container,
+.section-reveal > .venue-layout,
+.site-footer.section-reveal .footer-inner {
   opacity: 0;
-  transform: translateY(36px);
-  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+  transform: translateY(20px);
+  transition:
+    opacity var(--reveal-duration) var(--ease-premium),
+    transform var(--reveal-duration) var(--ease-premium);
 }
 
-.section-reveal--visible {
+.section-reveal--visible .container,
+.section-reveal--visible > .venue-layout,
+.site-footer.section-reveal--visible .footer-inner {
   opacity: 1;
   transform: translateY(0);
 }
@@ -819,6 +924,39 @@ html[lang='en'] .hero-couple-names {
   color: var(--ivory);
   margin: 0 0 0.75rem;
   text-shadow: 0 0 32px rgba(216, 188, 122, 0.34), 0 0 2px rgba(198, 161, 91, 0.1);
+  position: relative;
+  isolation: isolate;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  inset: -0.06em -4%;
+  border-radius: 0.12em;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(216, 188, 122, 0.1) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: 220% 100%;
+  animation: title-shimmer 18s var(--ease-premium) infinite;
+  animation-delay: -4s;
+  pointer-events: none;
+  opacity: 0.7;
+  mix-blend-mode: soft-light;
+}
+
+@keyframes title-shimmer {
+  0%,
+  100% {
+    background-position: 140% 50%;
+  }
+  50% {
+    background-position: -40% 50%;
+  }
 }
 
 .section-desc {
@@ -970,7 +1108,17 @@ html[lang='en'] .hero-couple-names {
   position: absolute;
   inset: -50%;
   background: conic-gradient(from 180deg, transparent, rgba(216, 188, 122, 0.28), transparent 40%);
-  animation: spin-slow 14s linear infinite;
+  animation: spin-slow 14s linear infinite, venue-lux-pulse 12s ease-in-out infinite;
+}
+
+@keyframes venue-lux-pulse {
+  0%,
+  100% {
+    opacity: 0.88;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 @keyframes spin-slow {
@@ -1297,6 +1445,27 @@ body.is-switching-lang main {
   .particle {
     animation: none;
     opacity: 0.2;
+  }
+
+  .particle--sparkle {
+    animation: none !important;
+    opacity: 0.14 !important;
+    box-shadow: none !important;
+  }
+
+  .nav-brand::after,
+  .hero-title::after,
+  .section-title::after {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  .hero-glow {
+    animation: drift 18s ease-in-out infinite !important;
+  }
+
+  .venue-shimmer {
+    animation: spin-slow 14s linear infinite !important;
   }
 
   .hero-couple-names {

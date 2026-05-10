@@ -231,24 +231,43 @@ function createParticles() {
   const host = $(SELECTORS.particles);
   if (!host) return;
 
-  const count = window.matchMedia('(max-width: 768px)').matches ? 28 : 48;
+  const mobile = window.matchMedia('(max-width: 768px)').matches;
+  const mistCount = mobile ? 14 : 22;
+  const sparkleCount = mobile ? 16 : 28;
   const frag = document.createDocumentFragment();
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < mistCount; i++) {
     const p = document.createElement('span');
     p.className = 'particle';
-    const size = 2 + Math.random() * 4;
+    const size = 2 + Math.random() * 3.5;
     const left = Math.random() * 100;
-    const duration = 14 + Math.random() * 22;
-    const delay = Math.random() * -25;
+    const duration = 18 + Math.random() * 26;
+    const delay = Math.random() * -30;
     p.style.width = `${size}px`;
     p.style.height = `${size}px`;
     p.style.left = `${left}%`;
     p.style.animationDuration = `${duration}s`;
     p.style.animationDelay = `${delay}s`;
-    p.style.opacity = String(0.15 + Math.random() * 0.45);
+    p.style.opacity = String(0.12 + Math.random() * 0.35);
     frag.appendChild(p);
   }
+
+  for (let i = 0; i < sparkleCount; i++) {
+    const p = document.createElement('span');
+    p.className = 'particle particle--sparkle';
+    const size = 1 + Math.random() * 2.8;
+    const left = Math.random() * 100;
+    const duration = 32 + Math.random() * 36;
+    const delay = Math.random() * -40;
+    p.style.width = `${size}px`;
+    p.style.height = `${size}px`;
+    p.style.left = `${left}%`;
+    p.style.animationDuration = `${duration}s`;
+    p.style.animationDelay = `${delay}s`;
+    p.style.opacity = String(0.2 + Math.random() * 0.35);
+    frag.appendChild(p);
+  }
+
   host.appendChild(frag);
 }
 
@@ -588,7 +607,7 @@ function initRevealOnScroll() {
         }
       });
     },
-    { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+    { threshold: 0.1, rootMargin: '0px 0px -6% 0px' }
   );
 
   sections.forEach((s) => io.observe(s));
